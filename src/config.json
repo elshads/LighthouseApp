@@ -1,0 +1,4 @@
+{
+    "apiserver": "http://localhost:3000",
+    "companyname": "Lighthouse"
+}
