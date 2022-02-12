@@ -1,4 +1,5 @@
 {
-    "apiserver": "http://localhost:3000",
-    "companyname": "Lighthouse"
+    "companyname": "Lighthouse",
+    "domain": "fh-swf.de",
+    "connection": "postgres://postgres:postgres@localhost:5432/lighthousedb"
 }

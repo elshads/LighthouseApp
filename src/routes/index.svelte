@@ -1,5 +1,6 @@
 <script>
-  import notifications from '../appStore.js';
+	import { session } from '$app/stores';
+	import notifications from '../appStore.js';
 	import { ComboBox, Button } from 'carbon-components-svelte';
 </script>
 
@@ -14,6 +15,8 @@
 	> for more information
 </p>
 
+<p>{JSON.stringify($session)}</p>
+
 <ComboBox
 	placeholder="Select contact method"
 	items={[
@@ -23,6 +26,13 @@
 	]}
 />
 
-
-<Button kind="danger" on:click={() => notifications.showNotification(true, "error", "Error Message", "Click here")}>Error</Button>
-<Button kind="primary" on:click={() => notifications.showNotification(true, "success", "Success Message", "Click here")}>Success</Button>
+<Button
+	kind="danger"
+	on:click={() => notifications.showNotification(true, 'error', 'Error Message', 'Click here')}
+	>Error</Button
+>
+<Button
+	kind="primary"
+	on:click={() => notifications.showNotification(true, 'success', 'Success Message', 'Click here')}
+	>Success</Button
+>

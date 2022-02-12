@@ -4,9 +4,9 @@
 	import { Loading } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 
-	import AppBar from '../lib/AppBar.svelte';
-	import NavBar from '../lib/NavBar.svelte';
-	import Notification from '../lib/Notification.svelte';
+	import AppBar from '$lib/AppBar.svelte';
+	import NavBar from '$lib/NavBar.svelte';
+	import Notification from '$lib/Notification.svelte';
 	let isSideNavOpen = false;
 
 	

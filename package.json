@@ -22,5 +22,11 @@
         "prettier-plugin-svelte": "^2.6.0",
         "svelte": "^3.46.2"
     },
-    "type": "module"
+    "type": "module",
+    "dependencies": {
+        "cookie": "^0.4.2",
+        "crypto": "^1.0.1",
+        "pg-promise": "^10.11.1",
+        "uuid": "^8.3.2"
+    }
 }
