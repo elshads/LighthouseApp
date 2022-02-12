@@ -1,3 +1,0 @@
-{
-    "connection": "postgres://postgres:postgres@localhost:5432/lighthousedb"
-}
