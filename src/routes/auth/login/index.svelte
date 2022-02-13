@@ -1,13 +1,50 @@
 <script>
 	const pageName = 'Login';
-	import config from '../../../config.json';
-	import notifications from '../../../appStore.js';
+	import notifications, { loading } from '../../../appStore.js';
 	import { TextInput, Button, Link } from 'carbon-components-svelte';
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
 	let username = '';
 	let password = '';
 	let invalidUsername = false;
 	let invalidPassword = false;
+
+	let usernameRef;
+
+	onMount(async () => {
+		usernameRef.focus();
+	});
+
+
+	async function loginUser() {
+		try {
+			const response = await fetch('/auth/login', {
+				method: 'POST',
+				body: JSON.stringify({
+					username,
+					password
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			const data = await response.json();
+			if (data.id > 0) {
+				location.reload();
+			} else {
+				notifications.showNotification(true, 'error', data.message);
+			}
+		} catch (err) {
+			notifications.showNotification(true, 'error', 'comp other err: ' + err.message);
+		}
+	}
+
+	async function keyUp(event) {
+		if (event.key === 'Enter') {
+			await loginUser();
+		}
+	}
 </script>
 
 <svelte:head>
@@ -21,11 +58,13 @@
 	<div class="py-2">
 		<TextInput
 			bind:value={username}
+			bind:ref={usernameRef}
 			type="email"
 			invalid={invalidUsername}
 			invalidText="Required: lastname.firstname@fh-swf.de"
 			labelText="Username"
 			placeholder="Enter username..."
+			on:keyup={keyUp}
 		/>
 	</div>
 	<div class="py-2">
@@ -36,10 +75,11 @@
 			invalidText="Required: min length 6 characters"
 			labelText="Password"
 			placeholder="Enter password..."
+			on:keyup={keyUp}
 		/>
 	</div>
 	<div class="py-4">
-		<Button>Log in</Button>
+		<Button on:click={loginUser}>Log in</Button>
 	</div>
 	<div class="py-2">
 		or <Link href="/auth/register">Register</Link>

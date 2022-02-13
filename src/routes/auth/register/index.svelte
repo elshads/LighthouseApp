@@ -1,9 +1,10 @@
 <script>
 	const pageName = 'Register';
 	import config from '../../../config.json';
-	import notifications from '../../../appStore.js';
+	import notifications, { loading } from '../../../appStore.js';
 	import { TextInput, Button, Link } from 'carbon-components-svelte';
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
 	let username = '';
 	let fullname = '';
@@ -14,10 +15,16 @@
 	let invalidPassword = false;
 	let invalidPasswordConfirmation = false;
 
+	let usernameRef;
+
 	$: invalidUsername = !username.includes('@' + config.domain);
 	$: invalidFullname = fullname.length < 1;
 	$: invalidPassword = password.length < 6;
 	$: invalidPasswordConfirmation = password != password_confirm;
+
+	onMount(() => {
+		usernameRef.focus();
+	});
 
 	async function registerUser() {
 		if (!invalidUsername && !invalidFullname && !invalidPassword && !invalidPasswordConfirmation) {
@@ -35,16 +42,22 @@
 				});
 				const data = await response.json();
 				if (data.id > 0) {
-					notifications.showNotification(true, 'success', 'User successfully registered');
+					notifications.showNotification(true, 'success', data.message);
 					goto('/auth/login');
 				} else {
 					notifications.showNotification(true, 'error', data.message);
 				}
 			} catch (err) {
-				notifications.showNotification(true, 'error', err.message);
+				notifications.showNotification(true, 'error', 'comp other err: ' + err.message);
 			}
 		} else {
 			notifications.showNotification(true, 'error', 'Correct your entries and try again');
+		}
+	}
+
+	async function keyUp(event) {
+		if (event.key === 'Enter') {
+			await registerUser();
 		}
 	}
 </script>
@@ -60,11 +73,13 @@
 	<div class="py-2">
 		<TextInput
 			bind:value={username}
+			bind:ref={usernameRef}
 			type="email"
 			invalid={invalidUsername}
 			invalidText="Required: username@fh-swf.de"
 			labelText="Username"
 			placeholder="Enter username..."
+			on:keyup={keyUp}
 		/>
 	</div>
 	<div class="py-2">
@@ -75,6 +90,7 @@
 			invalidText="Required"
 			labelText="Full name"
 			placeholder="Enter your name..."
+			on:keyup={keyUp}
 		/>
 	</div>
 	<div class="py-2">
@@ -85,6 +101,7 @@
 			invalidText="Required: min length 6 characters"
 			labelText="Password"
 			placeholder="Enter password..."
+			on:keyup={keyUp}
 		/>
 	</div>
 	<div class="py-2">
@@ -95,6 +112,7 @@
 			invalidText="password does not match"
 			labelText="Password Confirmation"
 			placeholder="Confirm password..."
+			on:keyup={keyUp}
 		/>
 	</div>
 	<div class="py-4">

@@ -1,6 +1,21 @@
+<script context="module">
+	export async function load({ session }) {
+		if (!session.authenticated) {
+			return {
+				status: 302,
+				redirect: '/auth/login'
+			};
+		}
+		return {
+			// props:{
+			// 	user_id: session.user_id
+			// }
+		}
+	}
+</script>
+
 <script>
-	import config from '../config.json';
-	import {loading, currentUser, theme} from '../appStore.js';
+	import { loading, theme } from '../appStore.js';
 	import { Loading } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 
@@ -9,19 +24,8 @@
 	import Notification from '$lib/Notification.svelte';
 	let isSideNavOpen = false;
 
-	
-	onMount( async () => {
+	onMount(async () => {
 		document.documentElement.setAttribute('theme', $theme);
-		$loading = true;
-		await fetch(`${config.apiserver}/api/users/1`)
-			.then((response) => response.json())
-			.then((data) => {
-				$currentUser = data.data[0];
-			})
-			.catch((err) => {
-				console.log(err.message);
-			});
-		$loading = false;
 	});
 
 	$: if (typeof window !== 'undefined') {
@@ -40,6 +44,5 @@
 	<slot />
 	<Notification />
 </div>
-
 
 <Loading bind:active={$loading} />

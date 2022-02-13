@@ -33,7 +33,7 @@
 	<a href="/" class="app-header-name">
 		<button class="app-header-button">
 			<img src="img/logo.png" alt="logo" height="32" class="mr-4"/>
-			<span>{config.companyname}</span>
+			<span>{config.appname}</span>
 		</button>
 	</a>
 	<svelte:fragment slot="skip-to-content">

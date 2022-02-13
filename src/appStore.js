@@ -1,7 +1,6 @@
 import { writable } from 'svelte/store';
 
 export let loading = writable(false);
-export let currentUser = writable({});
 const storedTheme = typeof window !== 'undefined' ? localStorage.theme : "white";
 export const theme = writable(storedTheme || "white");
 theme.subscribe((value) => { if (typeof window !== 'undefined') { localStorage.theme = value } });

@@ -1,5 +1,7 @@
 {
-    "companyname": "Lighthouse",
+    "appname": "Lighthouse",
+    "companyname": "FH Sudwestfalen",
+    "companypage": "https://www.fh-swf.de/en/",
     "domain": "fh-swf.de",
     "connection": "postgres://postgres:postgres@localhost:5432/lighthousedb"
 }
