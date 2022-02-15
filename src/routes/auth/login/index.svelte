@@ -2,8 +2,8 @@
 	const pageName = 'Login';
 	import notifications, { loading } from '../../../appStore.js';
 	import { TextInput, Button, Link } from 'carbon-components-svelte';
-	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	let username = '';
 	let password = '';
@@ -15,7 +15,6 @@
 	onMount(async () => {
 		usernameRef.focus();
 	});
-
 
 	async function loginUser() {
 		try {
@@ -32,6 +31,17 @@
 			const data = await response.json();
 			if (data.id > 0) {
 				location.reload();
+			} else if (data.id === -2) {
+				notifications.showNotification(
+					true,
+					'error',
+					'Email is not confirmed. Please confirm your email',
+					'Resend email',
+					() => {
+						goto('/auth/confirmation');
+						notifications.showNotification(false);
+					}
+				);
 			} else {
 				notifications.showNotification(true, 'error', data.message);
 			}
@@ -61,7 +71,7 @@
 			bind:ref={usernameRef}
 			type="email"
 			invalid={invalidUsername}
-			invalidText="Required: lastname.firstname@fh-swf.de"
+			invalidText="Required: username@fh-swf.de"
 			labelText="Username"
 			placeholder="Enter username..."
 			on:keyup={keyUp}

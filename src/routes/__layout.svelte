@@ -24,8 +24,11 @@
 	import Notification from '$lib/Notification.svelte';
 	let isSideNavOpen = false;
 
+	$loading = true;
+
 	onMount(async () => {
 		document.documentElement.setAttribute('theme', $theme);
+		$loading = false;
 	});
 
 	$: if (typeof window !== 'undefined') {

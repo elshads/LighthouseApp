@@ -1,5 +1,8 @@
 import crypto from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 import { db, PQ } from '../../../db';
+import { sendEmail } from '../../../mailer'
+import config from '../../../config.json';
 
 export async function post({ request }) {
     const data = await request.json();
@@ -27,9 +30,10 @@ export async function post({ request }) {
         }
         const salt = crypto.randomBytes(16);
         const password_hash = crypto.pbkdf2Sync(data.password, salt, 310000, 32, 'sha256');
+        const token = uuidv4();
         let insertSql = new PQ({
-            text: 'INSERT INTO appuser (username, email_confirmed, fullname, role_id, status_id, password_hash, salt) VALUES ($1, false, $2, 3, 0, $3, $4) ON CONFLICT (username) DO NOTHING RETURNING id',
-            values: [data.username.toLowerCase(), data.fullname, password_hash, salt]
+            text: 'INSERT INTO appuser (username, email_confirmed, fullname, role_id, status_id, password_hash, salt, confirmation_token) VALUES ($1, false, $2, 3, 0, $3, $4, $5) ON CONFLICT (username) DO NOTHING RETURNING id',
+            values: [data.username.toLowerCase(), data.fullname, password_hash, salt, token]
         });
         let result = await db.one(insertSql).catch((err) => {
             return {
@@ -37,6 +41,12 @@ export async function post({ request }) {
             };
         });
         if (result.id > 0) {
+            const message = {
+                to: data.username,
+                subject: 'no-reply: Email verification',
+                html: `<div style="display: flex; text-align: center;"><a style="color: #fff; font-size: 1.25rem; text-decoration: none; background-color: #594ae2; padding: 1rem; border-radius: 2px;" href="${config.appurl}/auth/confirmation/${token}">Confirm email</a></div>`
+            };
+            sendEmail(message);
             return {
                 status: 200,
                 body: {

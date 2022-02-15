@@ -16,6 +16,44 @@
     --cds-link-color: #f4f4f4;
 }
 
+.auth-bg {
+    display: flex;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #fff;
+    color: #1e1e1e;
+}
+
+.auth-box {
+    display: block;
+    background-color: #fff;
+    width: 20rem;
+    min-height: 20rem;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.company-logo {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 1rem;
+}
+
+@media screen and (max-width: 600px) {
+    .company-logo {
+        display: none;
+    }
+}
+
 a.bx--header__name {
     display: none;
 }

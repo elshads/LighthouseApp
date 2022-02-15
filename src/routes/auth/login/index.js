@@ -10,27 +10,55 @@ export async function post({ request }) {
             text: 'SELECT * FROM appuser WHERE username=$1',
             values: [data.username]
         });
-        let result = await db.one(sql).catch((err) => {
+        let user = await db.one(sql).catch((err) => {
             return {
                 message: err.message
             };
         });
-        if (result.id > 0) {
-            const hash = crypto.pbkdf2Sync(data.password, result.salt, 310000, 32, 'sha256');
-            const valid = Buffer.compare(result.password_hash, hash);
-            const cookieId = uuidv4();
-            const maxAge = 3600 * 24 * 180;
-            const headers = {
-                'Set-Cookie': cookie.serialize('session_id', cookieId, {
-                    httpOnly: true,
-                    maxAge,
-                    path: '/'
-                })
-            };
-            if (valid === 0) {
+
+        if (user.id > 0) {
+            const hash = crypto.pbkdf2Sync(data.password, user.salt, 310000, 32, 'sha256');
+            const validPassword = Buffer.compare(user.password_hash, hash);
+            if (validPassword === 0) {
+                if (user.status_id > 0) {
+                    return {
+                        status: 401,
+                        body: {
+                            id: -1,
+                            message: 'User closed. Contact your administrator'
+                        },
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    };
+                }
+                if (!user.email_confirmed) {
+                    return {
+                        status: 401,
+                        body: {
+                            id: -2,
+                            message: 'Email is not confirmed. Please confirm your email'
+                        },
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    };
+                }
+
+                const cookieId = uuidv4();
+                const maxAge = 3600 * 24 * 30;
+                const headers = {
+                    'Set-Cookie': cookie.serialize('session_id', cookieId, {
+                        httpOnly: true,
+                        sameSite: 'strict',
+                        maxAge,
+                        path: '/'
+                    })
+                };
+
                 let cookieSql = new PQ({
                     text: 'INSERT INTO session (session_id, user_id, start_date, max_age) VALUES ($1, $2, to_timestamp($3 / 1000.0), $4) RETURNING id',
-                    values: [cookieId, result.id, Date.now(), maxAge]
+                    values: [cookieId, user.id, Date.now(), maxAge]
                 });
                 let cookieResult = await db.one(cookieSql).catch((err) => {
                     return {
@@ -73,7 +101,7 @@ export async function post({ request }) {
             status: 500,
             body: {
                 id: -1,
-                message: 'endp result err: ' + result.message
+                message: 'Wrong username or password'
             },
             headers: {
                 'Content-Type': 'application/json'

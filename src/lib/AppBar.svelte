@@ -17,7 +17,7 @@
 	import Logout20 from 'carbon-icons-svelte/lib/Logout20';
 	import BrightnessContrast20 from 'carbon-icons-svelte/lib/BrightnessContrast20';
 	import Badge20 from 'carbon-icons-svelte/lib/Badge20';
-	import { page } from '$app/stores';
+	import { page, session } from '$app/stores';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 
@@ -26,6 +26,28 @@
 
 	async function changeTheme() {
 		$theme = $theme === 'white' ? 'g100' : 'white';
+	}
+
+	async function logOut(){
+		try {
+			const response = await fetch('/auth/logout', {
+				method: 'POST',
+				body: JSON.stringify({
+					session_id: $session.user.session_id
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			const data = await response.json();
+			if (data.id > 0) {
+				location.reload();
+			} else {
+				notifications.showNotification(true, 'error', data.message);
+			}
+		} catch (err) {
+			notifications.showNotification(true, 'error', 'comp other err: ' + err.message);
+		}
 	}
 </script>
 
@@ -59,6 +81,6 @@
 				<HeaderPanelLink>Switcher item 1</HeaderPanelLink>
 			</HeaderPanelLinks>
 		</HeaderAction>
-		<HeaderGlobalAction aria-label="Logout" icon={Logout20} />
+		<HeaderGlobalAction aria-label="Logout" icon={Logout20} on:click={logOut} />
 	</HeaderUtilities>
 </Header>

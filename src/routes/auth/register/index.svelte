@@ -15,15 +15,15 @@
 	let invalidPassword = false;
 	let invalidPasswordConfirmation = false;
 
-	let usernameRef;
+	let fullnameRef;
 
-	$: invalidUsername = !username.includes('@' + config.domain);
+	$: invalidUsername = !(username.length > 0 && (username.includes('@' + config.accepteddomain) || config.accepteddomain === '*'));
 	$: invalidFullname = fullname.length < 1;
 	$: invalidPassword = password.length < 6;
 	$: invalidPasswordConfirmation = password != password_confirm;
 
 	onMount(() => {
-		usernameRef.focus();
+		fullnameRef.focus();
 	});
 
 	async function registerUser() {
@@ -72,24 +72,24 @@
 	</div>
 	<div class="py-2">
 		<TextInput
-			bind:value={username}
-			bind:ref={usernameRef}
-			type="email"
-			invalid={invalidUsername}
-			invalidText="Required: username@fh-swf.de"
-			labelText="Username"
-			placeholder="Enter username..."
-			on:keyup={keyUp}
-		/>
-	</div>
-	<div class="py-2">
-		<TextInput
 			bind:value={fullname}
+			bind:ref={fullnameRef}
 			type="text"
 			invalid={invalidFullname}
 			invalidText="Required"
 			labelText="Full name"
 			placeholder="Enter your name..."
+			on:keyup={keyUp}
+		/>
+	</div>
+	<div class="py-2">
+		<TextInput
+			bind:value={username}
+			type="email"
+			invalid={invalidUsername}
+			invalidText="Required: username@fh-swf.de"
+			labelText="Username"
+			placeholder="Enter username..."
 			on:keyup={keyUp}
 		/>
 	</div>
@@ -119,6 +119,12 @@
 		<Button on:click={registerUser}>Register</Button>
 	</div>
 	<div class="py-2">
-		or <Link href="/auth/login">Log in</Link>
+		Already registered?
+		<div class="py-2">
+			<Link href="/auth/login">Log in</Link>
+		</div>
+		<div>
+			or <Link href="/auth/confirmation">Resend confirmation link</Link>
+		</div>
 	</div>
 </div>

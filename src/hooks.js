@@ -11,18 +11,23 @@ export async function getSession({ request: { headers } }) {
             };
         }
         let sql = new PQ({
-            text: 'SELECT * FROM session WHERE session_id=$1',
+            text: 'SELECT s.session_id, u.* FROM session s INNER JOIN appuser u ON s.user_id = u.id AND s.session_id=$1',
             values: [cookies.session_id]
         });
-        const session = await db.one(sql).catch((err) => {
+        const user = await db.one(sql).catch((err) => {
             return {
                 message: err.message
             };
         });
-        if (session.id > 0) {
+        if (user.id > 0) {
             return {
                 authenticated: true,
-                user: session.user_id
+                user: {
+                    id: user.id,
+                    username: user.username,
+                    fullname: user.fullname,
+                    session_id: user.session_id,
+                }
             };
         }
         return {

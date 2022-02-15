@@ -1,7 +1,17 @@
 {
     "appname": "Lighthouse",
+    "appurl": "http://192.168.0.171:8080",
     "companyname": "FH Sudwestfalen",
     "companypage": "https://www.fh-swf.de/en/",
-    "domain": "fh-swf.de",
-    "connection": "postgres://postgres:postgres@localhost:5432/lighthousedb"
+    "accepteddomain": "fh-swf.de",
+    "connection": "postgres://postgres:postgres@localhost:5432/lighthousedb",
+    "mailsettings": {
+        "host": "smtp.gmail.com",
+        "port": 587,
+        "secure": false,
+        "auth": {
+            "user": "droidsrvs@gmail.com",
+            "pass": "Dr0id$ervice"
+        }
+    }
 }

@@ -33,6 +33,5 @@
 >
 <Button
 	kind="primary"
-	on:click={() => notifications.showNotification(true, 'success', 'Success Message', 'Click here')}
 	>Success</Button
 >
