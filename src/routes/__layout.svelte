@@ -42,6 +42,7 @@
 
 <svelte:head>
 	<meta content="noindex" />
+	<link rel="stylesheet" href={`/css/charts/styles${$theme === 'g100' ? '-g100' : ''}.min.css`} />
 </svelte:head>
 
 <AppBar bind:isSideNavOpen />
