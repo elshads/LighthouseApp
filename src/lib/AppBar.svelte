@@ -19,7 +19,6 @@
 	import Badge20 from 'carbon-icons-svelte/lib/Badge20';
 	import { page, session } from '$app/stores';
 	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
 
 	export let isSideNavOpen = false;
 	let isOpen1 = false;
@@ -41,7 +40,8 @@
 			});
 			const data = await response.json();
 			if (data.id > 0) {
-				location.reload();
+				$session.authenticated = false;
+				//location.reload();
 			} else {
 				notifications.showNotification(true, 'error', data.message);
 			}

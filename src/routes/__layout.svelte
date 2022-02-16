@@ -10,11 +10,12 @@
 			// props:{
 			// 	user_id: session.user_id
 			// }
-		}
+		};
 	}
 </script>
 
 <script>
+	import { session } from '$app/stores';
 	import { loading, theme } from '../appStore.js';
 	import { Loading } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
@@ -22,6 +23,7 @@
 	import AppBar from '$lib/AppBar.svelte';
 	import NavBar from '$lib/NavBar.svelte';
 	import Notification from '$lib/Notification.svelte';
+	import { goto } from '$app/navigation';
 	let isSideNavOpen = false;
 
 	$loading = true;
@@ -34,6 +36,8 @@
 	$: if (typeof window !== 'undefined') {
 		document.documentElement.setAttribute('theme', $theme);
 	}
+
+	$: if(!$session.authenticated) {location.reload()};
 </script>
 
 <svelte:head>

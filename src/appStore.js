@@ -1,9 +1,14 @@
 import { writable } from 'svelte/store';
 
 export let loading = writable(false);
+
 const storedTheme = typeof window !== 'undefined' ? localStorage.theme : "white";
 export const theme = writable(storedTheme || "white");
 theme.subscribe((value) => { if (typeof window !== 'undefined') { localStorage.theme = value } });
+
+// const storedLogin = typeof window !== 'undefined' ? localStorage.login : "true";
+// export const login = writable(storedLogin || "true");
+// login.subscribe((value) => { if (typeof window !== 'undefined') { localStorage.login = value } });
 
 
 export let open = writable(false);
