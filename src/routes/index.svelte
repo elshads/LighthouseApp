@@ -4,8 +4,21 @@
 	import { ComboBox, Button } from 'carbon-components-svelte';
 	import { GaugeChart, DonutChart, RadarChart } from '@carbon/charts-svelte';
 	import { onMount } from 'svelte';
-	import Tiptap from '$lib/Tiptap.svelte';
+	import Editor from '$lib/Editor.svelte';
+	import Viewer from '$lib/Viewer.svelte';
 
+	let avatar, fileinput;
+	let content;
+	let viewer = false;
+
+	function onFileSelected(event) {
+		let imageFile = event.target.files[0];
+		let reader = new FileReader();
+		reader.readAsDataURL(imageFile);
+		reader.onload = (e) => {
+			avatar = e.target.result;
+		};
+	}
 </script>
 
 <svelte:head>
@@ -19,5 +32,24 @@
 	> for more information
 </p>
 
+<Editor bind:content />
 
-<Tiptap></Tiptap>
+<button on:click={() => viewer = !viewer}>Viewer</button>
+
+<div id="app">
+	{#if avatar}
+		<img class="avatar" src={avatar} alt="d" />
+	{/if}
+	<button
+		on:click={() => {
+			fileinput.click();
+		}}>Upload</button
+	>
+	<input
+		style="display:none"
+		type="file"
+		accept=".jpg, .jpeg, .png"
+		on:change={(e) => onFileSelected(e)}
+		bind:this={fileinput}
+	/>
+</div>

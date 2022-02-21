@@ -132,3 +132,8 @@ button[disabled] {
 .tt-link:hover {
     text-decoration: underline;
 }
+
+.tt-image {
+    max-height: 18rem;
+    max-width: 18rem;
+}

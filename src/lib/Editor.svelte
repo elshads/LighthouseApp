@@ -8,11 +8,13 @@
 	import Placeholder from '@tiptap/extension-placeholder';
 	import Link from '@tiptap/extension-link';
 	import Highlight from '@tiptap/extension-highlight';
+	import TextAlign from '@tiptap/extension-text-align';
 	import Image from '@tiptap/extension-image';
 
+	export let content;
 	let element;
 	let editor;
-	let json;
+	let fileinput;
 
 	onMount(() => {
 		editor = new Editor({
@@ -33,6 +35,9 @@
 				Underline,
 				TaskList,
 				TaskItem,
+				TextAlign.configure({
+					types: ['heading', 'paragraph']
+				}),
 				Placeholder.configure({
 					placeholder: 'Write something …'
 				}),
@@ -45,27 +50,31 @@
 				Highlight.configure({ multicolor: true }),
 				Image.configure({
 					HTMLAttributes: {
-						class: 'my-custom-class'
+						class: 'tt-image'
 					},
 					allowBase64: true
 				})
 			],
-			content: '',
+			content,
 			onUpdate: ({ editor }) => {
-				json = editor.getHTML();
+				content = editor.getJSON();
 			},
 			onTransaction: () => {
 				editor = editor;
 			}
 		});
-		json = editor.getHTML();
 	});
 
-	function addImage() {
-		const image = document.getElementById('file-input').click();
-		if (image) {
-			editor.chain().focus().setImage({ src: image }).run();
-		}
+	function onFileSelected(event) {
+		let imageFile = event.target.files[0];
+		let reader = new FileReader();
+		reader.readAsDataURL(imageFile);
+		reader.onload = (e) => {
+			const image = e.target.result;
+			if (image) {
+				editor.chain().focus().setImage({ src: image }).run();
+			}
+		};
 	}
 
 	onDestroy(() => {
@@ -166,6 +175,40 @@
 
 			<button
 				class="tt-btn"
+				on:click={() => editor.chain().focus().setTextAlign('left').run()}
+				class:active={editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''}
+			>
+				<i class="bi bi-text-left" />
+			</button>
+
+			<button
+				class="tt-btn"
+				on:click={() => editor.chain().focus().setTextAlign('center').run()}
+				class:active={editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''}
+			>
+				<i class="bi bi-text-center" />
+			</button>
+
+			<button
+				class="tt-btn"
+				on:click={() => editor.chain().focus().setTextAlign('right').run()}
+				class:active={editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''}
+			>
+				<i class="bi bi-text-right" />
+			</button>
+
+			<button
+				class="tt-btn"
+				on:click={() => editor.chain().focus().setTextAlign('justify').run()}
+				class:active={editor.isActive({ textAlign: 'justify' }) ? 'is-active' : ''}
+			>
+				<i class="bi bi-justify" />
+			</button>
+
+			<span class="tt-separator" />
+
+			<button
+				class="tt-btn"
 				on:click={() => editor.chain().focus().toggleCode().run()}
 				class:active={editor.isActive('code') ? 'is-active' : ''}
 			>
@@ -220,7 +263,12 @@
 				<i class="bi bi-arrow-bar-down" />
 			</button>
 
-			<button class="tt-btn" on:click={addImage}><i class="bi bi-image" /></button>
+			<button
+				class="tt-btn"
+				on:click={() => {
+					fileinput.click();
+				}}><i class="bi bi-image" /></button
+			>
 
 			<span class="tt-separator" />
 
@@ -261,7 +309,14 @@
 		<div bind:this={element} />
 	</div>
 
-	<input id="file-input" type="file" name="name" style="display: none;" />
+	<input
+		style="display:none"
+		type="file"
+		accept=".jpg, .jpeg, .png"
+		on:change={(e) => onFileSelected(e)}
+		bind:this={fileinput}
+	/>
 </div>
 
-<div>{json}</div>
+<div>Content: {JSON.stringify(content)}</div>
+<div>FileInput: {JSON.stringify(fileinput)}</div>
