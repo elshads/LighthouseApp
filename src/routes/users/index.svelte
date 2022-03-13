@@ -29,6 +29,8 @@
 	let rows = [];
 	let initialRows = [];
 	let selectedRows = [];
+	let linkColumn = 1;
+	let link = '/users/';
 
 	const headers = [
 		{ key: 'username', value: 'Email' },
@@ -39,15 +41,13 @@
 		{ key: 'statusname', value: 'Status' }
 	];
 
-	
-
 	onMount(async () => {
 		$loading = true;
 		await loadData();
 		$loading = false;
 	});
 
-	async function loadData(){
+	async function loadData() {
 		$loading = true;
 		try {
 			const response = await fetch('/users', {
@@ -56,7 +56,8 @@
 					user_id: $session.user.id
 				}),
 				headers: {
-					'Content-Type': 'application/json'
+					'Content-Type': 'application/json',
+					accept: 'application/json'
 				}
 			});
 			const data = await response.json();
@@ -116,7 +117,6 @@
 	</Breadcrumb>
 </Tile>
 
-
 <div class="users-table">
 	<DataTable stickyHeader sortable batchSelection bind:selectedRowIds {headers} {rows}>
 		<Toolbar>
@@ -139,8 +139,8 @@
 			</ToolbarContent>
 		</Toolbar>
 		<svelte:fragment slot="cell" let:row let:cell>
-			{#if cell.key === 'email'}
-				<Link href="/users/{row.id}">
+			{#if cell.key === headers[linkColumn].key}
+				<Link href={link + row.id}>
 					{cell.value}
 				</Link>
 			{:else}

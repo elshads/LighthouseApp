@@ -8,7 +8,10 @@
 	import EventSchedule20 from 'carbon-icons-svelte/lib/EventSchedule20';
 	import GroupPresentation20 from 'carbon-icons-svelte/lib/GroupPresentation20';
 	import CalendarHeatMap20 from 'carbon-icons-svelte/lib/CalendarHeatMap20';
-	import Collaborate32 from 'carbon-icons-svelte/lib/Collaborate32';
+	import Collaborate20 from 'carbon-icons-svelte/lib/Collaborate20';
+	import TableOfContents20 from 'carbon-icons-svelte/lib/TableOfContents20';
+	import Education20 from 'carbon-icons-svelte/lib/Education20';
+
 
 	export const navLinks = [{
 	        id: 200,
@@ -85,7 +88,7 @@
 	    {
 	        id: 401,
 	        text: 'Appointments',
-	        icon: Collaborate32,
+	        icon: Collaborate20,
 	        href: '/appointments',
 	        newtab: false,
 	        parent_id: null,
@@ -108,5 +111,23 @@
 	        newtab: false,
 	        parent_id: 800,
 	        sequence: 12
+	    },
+	    {
+	        id: 802,
+	        text: 'Lecturers',
+	        icon: Education20,
+	        href: '/lecturers',
+	        newtab: false,
+	        parent_id: 800,
+	        sequence: 13
+	    },
+	    {
+	        id: 803,
+	        text: 'Content',
+	        icon: TableOfContents20,
+	        href: '/content',
+	        newtab: false,
+	        parent_id: 800,
+	        sequence: 14
 	    }
 	];

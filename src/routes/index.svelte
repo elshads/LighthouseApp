@@ -1,4 +1,5 @@
 <script>
+	import config from '../config.json';
 	import { session } from '$app/stores';
 	import notifications from '../appStore.js';
 	import { ComboBox, Button } from 'carbon-components-svelte';
@@ -6,19 +7,24 @@
 	import { onMount } from 'svelte';
 	import Editor from '$lib/Editor.svelte';
 	import Viewer from '$lib/Viewer.svelte';
+	import DataGrid from '$lib/DataGrid.svelte';
+	import qrcode from 'qrcode';
 
 	let avatar, fileinput;
 	let content;
+	let rows = [];
+	let headers = [];
+	let selectedRowIds;
 	let viewer = false;
 
-	function onFileSelected(event) {
-		let imageFile = event.target.files[0];
-		let reader = new FileReader();
-		reader.readAsDataURL(imageFile);
-		reader.onload = (e) => {
-			avatar = e.target.result;
-		};
-	}
+	let image;
+	onMount(() => {
+		qrcode.toString(config.appurl, { type: 'svg' }, function (err, svgurl) {
+			let blob = new Blob([svgurl], { type: 'image/svg+xml' });
+			let url = URL.createObjectURL(blob);
+			image = url;
+		});
+	});
 </script>
 
 <svelte:head>
@@ -34,22 +40,4 @@
 
 <Editor bind:content />
 
-<button on:click={() => viewer = !viewer}>Viewer</button>
-
-<div id="app">
-	{#if avatar}
-		<img class="avatar" src={avatar} alt="d" />
-	{/if}
-	<button
-		on:click={() => {
-			fileinput.click();
-		}}>Upload</button
-	>
-	<input
-		style="display:none"
-		type="file"
-		accept=".jpg, .jpeg, .png"
-		on:change={(e) => onFileSelected(e)}
-		bind:this={fileinput}
-	/>
-</div>
+<div>{JSON.stringify(content)}</div>

@@ -1,6 +1,6 @@
 <script>
 	import config from '../config.json';
-	import {theme} from '../appStore.js';
+	import { theme } from '../appStore.js';
 	import {
 		Header,
 		HeaderUtilities,
@@ -11,7 +11,8 @@
 		HeaderPanelLink,
 		SkipToContent,
 		Button,
-		Link
+		Link,
+		TooltipIcon
 	} from 'carbon-components-svelte';
 	import UserAvatarFilledAlt20 from 'carbon-icons-svelte/lib/UserAvatarFilledAlt20';
 	import Logout20 from 'carbon-icons-svelte/lib/Logout20';
@@ -27,7 +28,7 @@
 		$theme = $theme === 'white' ? 'g100' : 'white';
 	}
 
-	async function logOut(){
+	async function logOut() {
 		try {
 			const response = await fetch('/auth/logout', {
 				method: 'POST',
@@ -54,7 +55,7 @@
 <Header bind:isSideNavOpen href="/">
 	<a href="/" class="app-header-name">
 		<button class="app-header-button">
-			<img src="img/logo.png" alt="logo" height="32" class="mr-4"/>
+			<img src="img/logo.png" alt="logo" height="32" class="mr-4" />
 			<span>{config.appname}</span>
 		</button>
 	</a>
@@ -62,6 +63,12 @@
 		<SkipToContent />
 	</svelte:fragment>
 	<HeaderUtilities>
+		<a href="/profile" class="app-header-name">
+			<button class="app-header-button">
+				<Badge20/>
+				<span class='px-1 app-header-badge'>768</span>
+			</button>
+		</a>
 		<HeaderGlobalAction aria-label="Theme" icon={BrightnessContrast20} on:click={changeTheme} />
 		<HeaderAction
 			bind:isOpen={isOpen1}

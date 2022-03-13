@@ -1,17 +1,17 @@
 {
     "appname": "Lighthouse",
-    "appurl": "http://192.168.0.171:8080",
+    "appurl": "http://192.168.0.211:8080",
     "companyname": "FH Sudwestfalen",
     "companypage": "https://www.fh-swf.de/en/",
     "accepteddomain": "fh-swf.de",
     "connection": "postgres://postgres:postgres@localhost:5432/lighthousedb",
     "mailsettings": {
-        "host": "smtp.gmail.com",
+        "host": "mail.privateemail.com",
         "port": 587,
         "secure": false,
         "auth": {
-            "user": "droidsrvs@gmail.com",
-            "pass": "Dr0id$ervice"
+            "user": "app@apexes.one",
+            "pass": "ApexU$er2022"
         }
     }
 }

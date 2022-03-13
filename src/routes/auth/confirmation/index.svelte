@@ -27,7 +27,8 @@
 						username
 					}),
 					headers: {
-						'Content-Type': 'application/json'
+						'Content-Type': 'application/json',
+						accept: 'application/json'
 					}
 				});
 				const data = await response.json();

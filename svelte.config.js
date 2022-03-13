@@ -7,7 +7,6 @@ const production = process.env.NODE_ENV === 'production';
 const config = {
     kit: {
         adapter: adapter(),
-        target: '#svelte',
 
         // added by Elshad
         vite: {

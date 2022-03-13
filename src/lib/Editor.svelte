@@ -1,5 +1,5 @@
 <script>
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount, afterUpdate, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
 	import StarterKit from '@tiptap/starter-kit';
 	import Underline from '@tiptap/extension-underline';
@@ -15,7 +15,7 @@
 	let element;
 	let editor;
 	let fileinput;
-
+	
 	onMount(() => {
 		editor = new Editor({
 			element: element,
@@ -64,6 +64,8 @@
 			}
 		});
 	});
+
+	$: if (editor && content) {editor.commands.setContent(content)};
 
 	function onFileSelected(event) {
 		let imageFile = event.target.files[0];
@@ -317,6 +319,3 @@
 		bind:this={fileinput}
 	/>
 </div>
-
-<div>Content: {JSON.stringify(content)}</div>
-<div>FileInput: {JSON.stringify(fileinput)}</div>

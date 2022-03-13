@@ -17,6 +17,9 @@
     --tt-codeblock-bg: #1e1e1e;
     --tt-codeblock-color: #fff;
     --tt-placeholder-color: #bcbcbc;
+    --date-picker-background: #fff;
+    --date-picker-foreground: #161616;
+    --card-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
 }
 
 :root[theme='g100'] {
@@ -37,6 +40,9 @@
     --tt-codeblock-bg: #fff;
     --tt-codeblock-color: #1e1e1e;
     --tt-placeholder-color: #616161;
+    --date-picker-background: #1e1e1e;
+    --date-picker-foreground: #fafafd;
+    --card-shadow: 0px 2px 1px -1px rgba(255, 255, 255, 0.2), 0px 1px 1px 0px rgba(255, 255, 255, 0.14), 0px 1px 3px 0px rgba(255, 255, 255, 0.12);
 }
 
 .color-mud {
@@ -139,9 +145,15 @@
     padding: 1rem;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
     .company-logo {
         display: none;
+    }
+    .bx--side-nav--rail:not(.bx--side-nav--expanded) {
+        display: none;
+    }
+    .content {
+        margin-left: 0 !important;
     }
 }
 
@@ -182,6 +194,22 @@ a.bx--header__name {
     color: #fff;
 }
 
+.app-header-badge {
+    font-size: 0.875rem;
+}
+
+.content-select .bx--select-input__wrapper {
+    max-width: 21rem;
+}
+
+.card {
+    color: var(--cds-link-color);
+    background-color: var(--cds-bg);
+    border-radius: 4px;
+    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    box-shadow: var(--card-shadow);
+}
+
 .selectedmenu::before {
     position: absolute;
     left: 4px;
@@ -193,6 +221,32 @@ a.bx--header__name {
 
 body {
     background-color: var(--cds-bg);
+}
+
+.date-input input {
+    min-width: 10rem !important;
+    min-height: 2.5rem;
+    font-size: 0.875rem;
+    border: 1px solid var(--tt-outline);
+}
+
+.invalid-label {
+    display: block;
+    max-height: 12.5rem;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--cds-text-error, #da1e28);
+    line-height: var(--cds-caption-01-line-height, 1.33333);
+    letter-spacing: var(--cds-caption-01-letter-spacing, 0.32px);
+    margin: 0.25rem 0 0;
+}
+
+.toolbar-item {
+    min-height: 3rem;
+    padding: 1rem 0.75rem 1rem 0.75rem;
+    text-align: right;
+    margin-right: auto;
+    white-space: nowrap;
 }
 
 .bx--data-table_inner-container {
@@ -237,9 +291,49 @@ body {
     margin: 1rem;
 }
 
+.data-table .bx--data-table--sticky-header {
+    max-height: 100%;
+    height: 100%;
+}
+
 .users-table .bx--data-table--sticky-header {
     max-height: calc(100vh - 12.5rem);
     height: calc(100vh - 12.5rem);
+}
+
+.contentlist-table .bx--data-table--sticky-header {
+    max-height: calc(100vh - 12.5rem);
+    height: calc(100vh - 12.5rem);
+}
+
+.contentlist-table thead tr th:nth-child(2),
+.contentlist-table tbody tr td:nth-child(2) {
+    max-width: 4.5rem;
+}
+
+.contentlist-table thead tr th:nth-child(4),
+.contentlist-table tbody tr td:nth-child(4) {
+    max-width: 14rem;
+}
+
+.contentlist-table thead tr th:nth-child(5),
+.contentlist-table tbody tr td:nth-child(5) {
+    max-width: 10rem;
+}
+
+.contentlist-table thead tr th:nth-child(6),
+.contentlist-table tbody tr td:nth-child(6) {
+    max-width: 8rem;
+}
+
+.contentlist-table thead tr th:nth-child(7),
+.contentlist-table tbody tr td:nth-child(7) {
+    max-width: 10rem;
+}
+
+.workshop-users-table .bx--data-table--sticky-header {
+    max-height: 10.1rem;
+    height: 10.1rem;
 }
 
 .bx--loading-overlay {
@@ -363,6 +457,141 @@ a.bx--side-nav__link,
         background-color: inherit;
         opacity: 0;
     }
+}
+
+.autocomplete {
+    min-width: 21rem !important;
+    height: auto !important;
+}
+
+.autocomplete-input {
+    outline: none;
+}
+
+.autocomplete .input-container {
+    background-color: transparent !important;
+    display: block !important;
+}
+
+.autocomplete-list {
+    background: var(--cds-field-01) !important;
+}
+
+.autocomplete-list-item {
+    color: var(--cds-text-01) !important;
+}
+
+.autocomplete-list-item.selected {
+    background-color: #0f62fe !important;
+    color: #f4f4f4 !important;
+}
+
+.autocomplete-list-item.confirmed {
+    background-color: #287DFF !important;
+    color: #f4f4f4 !important;
+}
+
+.autocomplete-list-item.confirmed:hover,
+.autocomplete-list-item.confirmed:focus-visible {
+    background-color: #0f62fe !important;
+}
+
+.autocomplete.show-clear .autocomplete-clear-button {
+    top: 14px !important;
+}
+
+.tags {
+    align-items: center;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    max-width: 100%;
+}
+
+.tags:not(:last-child) {
+    margin-bottom: 1rem;
+}
+
+.autocomplete.is-multiple .tags {
+    margin-right: 0.3em;
+    margin-bottom: 0;
+}
+
+.tags.has-addons .tag:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.tags.has-addons .tag:not(:first-child) {
+    margin-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.tags.has-addons .tag {
+    margin-right: 0;
+}
+
+.tags .tag:not(:last-child) {
+    margin-right: 0;
+}
+
+.tags .tag {
+    margin-bottom: 0.5rem;
+}
+
+.tag:not(body) {
+    align-items: center;
+    background-color: #0f62fe;
+    border-radius: 4px;
+    color: #f4f4f4;
+    display: inline-flex;
+    font-size: 0.75rem;
+    height: 2em;
+    justify-content: left;
+    line-height: 1.5;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.tag:not(body):hover {
+    overflow: visible;
+    z-index: 8999;
+}
+
+.tag:not(body).is-delete {
+    margin-left: 1px;
+    padding: 0;
+    position: relative;
+    width: 2em;
+}
+
+.tag:not(body).is-delete::before {
+    height: 1px;
+    width: 50%;
+}
+
+.tag:not(body).is-delete::after {
+    height: 50%;
+    width: 1px;
+}
+
+.tag:not(body).is-delete::before,
+.tag:not(body).is-delete::after {
+    background-color: currentColor;
+    content: "";
+    display: block;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%) rotate(45deg);
+    transform-origin: center center;
+}
+
+.autocomplete.is-multiple .tag.is-delete {
+    cursor: pointer;
 }
 
 .multiline {

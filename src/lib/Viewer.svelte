@@ -62,7 +62,7 @@
 				editor = editor;
 			}
 		});
-        editor.setEditable(false);
+		editor.setEditable(false);
 	});
 
 	onDestroy(() => {
@@ -70,6 +70,8 @@
 			editor.destroy();
 		}
 	});
+
+	$: if (editor && content) {editor.commands.setContent(content)};
 </script>
 
 <div>
