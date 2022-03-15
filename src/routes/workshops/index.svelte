@@ -1,9 +1,9 @@
 <script>
 	const pageName = 'Workshops';
 	import { session } from '$app/stores';
-	import notifications, { loading } from '../../appStore.js';
+	import notifications, { loading } from '$src/appStore.js';
 	import Viewer from '$lib/Viewer.svelte';
-	import { formatDateTime, formatDate, formatTime, toProperCase } from '../../global.js';
+	import { formatDateTime, formatDate, formatTime, toProperCase } from '$src/global.js';
 	import {
 		Accordion,
 		AccordionItem,

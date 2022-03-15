@@ -336,6 +336,10 @@ body {
     height: 10.1rem;
 }
 
+.datagrid .bx--link {
+    overflow: hidden;
+}
+
 .bx--loading-overlay {
     z-index: 9999;
 }

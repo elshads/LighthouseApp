@@ -11,11 +11,11 @@
 </script>
 
 <script>
-	import { loading } from '../../appStore.js';
+	import { loading } from '$src/appStore.js';
 	import { Loading } from 'carbon-components-svelte';
 	import Notification from '$lib/Notification.svelte';
 	import { onMount } from 'svelte';
-	import config from '../../config.json';
+	import config from '$src/config.json';
 
 	$loading = true;
 

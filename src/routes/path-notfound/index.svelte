@@ -1,5 +1,5 @@
 <script>
-	import { loading } from '../../appStore.js';
+	import { loading } from '$src/appStore.js';
 	import { Loading, Link } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import DoNot from 'carbon-pictograms-svelte/lib/DoNot.svelte';

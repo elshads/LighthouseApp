@@ -1,7 +1,7 @@
 <script>
 	const pageName = 'Activities';
 	import { session } from '$app/stores';
-	import notifications, { loading } from '../../appStore.js';
+	import notifications, { loading } from '$src/appStore.js';
 	import { Accordion, AccordionItem, Button } from 'carbon-components-svelte';
 	import { GaugeChart, DonutChart, RadarChart } from '@carbon/charts-svelte';
 </script>

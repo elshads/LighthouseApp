@@ -1,4 +1,4 @@
-import config from "./config.json";
+import config from "$src/config.json";
 import pgPromise from "pg-promise";
 const pgp = pgPromise();
 export const db = pgp(config.connection);

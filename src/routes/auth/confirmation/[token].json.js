@@ -1,4 +1,4 @@
-import { db, PQ } from '../../../db';
+import { db, PQ } from '$src/db';
 
 
 export async function get({ params }) {

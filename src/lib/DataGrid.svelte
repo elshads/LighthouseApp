@@ -26,7 +26,7 @@
 	export let size = 'medium';
 	export let tableClass = 'data-table';
 	export let linkColumn = -1;
-	export let link = '';
+	export let link = null;
 	export let searchKeys = ['name'];
 	export let exportVisible = true;
 	export let addVisible = false;
@@ -35,11 +35,15 @@
 	const dispatch = createEventDispatcher();
 
 	async function addHandler() {
-		dispatch('addAction');
+		dispatch('addClick');
 	}
 
 	async function deleteHandler() {
-		dispatch('deleteAction');
+		dispatch('deleteClick');
+	}
+
+	async function linkClickHandler(value) {
+		dispatch('linkClick', { value: value });
 	}
 
 	let initialRows = [];
@@ -79,58 +83,91 @@
 		}
 	}
 
-	$: if (filtering === false) {initialRows = rows.slice()};
+	$: if (filtering === false) {
+		initialRows = rows.slice();
+	}
 
 	$: if (initialRows.length > 0) {
 		selectedRows = initialRows.filter(function (f) {
 			return selectedRowIds.indexOf(f.id) > -1;
 		});
 	}
-
 </script>
 
-
-<div class={tableClass}>
-	<DataTable stickyHeader sortable batchSelection bind:selectedRowIds {headers} bind:rows {size}>
-		<Toolbar>
-			<ToolbarBatchActions>
-				{#if exportVisible === true}
-					<Button icon={Export16} on:click={downloadHandler(selectedRows, 'selected')}
-						>Export selected</Button
-					>
-				{/if}
-				{#if addVisible === true}
-					<Button on:click={addHandler} icon={Add16}>Add</Button>
-				{/if}
-				{#if deleteVisible === true}
-					<Button on:click={deleteHandler} icon={TrashCan16}>Delete</Button>
-				{/if}
-			</ToolbarBatchActions>
-			<ToolbarContent>
-				<div class="toolbar-item"><div>Rows: {rows.length}</div></div>
-				<ToolbarSearch value={searchValue} on:input={searchInput} on:clear={searchClear} />
-				{#if exportVisible === true}
-					<ToolbarMenu icon={Export16}>
-						<ToolbarMenuItem on:click={downloadHandler(initialRows, 'all')}
-							>.csv - All rows</ToolbarMenuItem
+<div class="datagrid">
+	<div class={tableClass}>
+		<DataTable stickyHeader sortable batchSelection bind:selectedRowIds {headers} bind:rows {size}>
+			<Toolbar>
+				<ToolbarBatchActions>
+					{#if exportVisible === true}
+						<Button icon={Export16} on:click={downloadHandler(selectedRows, 'selected')}
+							>Export selected</Button
 						>
-						<ToolbarMenuItem on:click={downloadHandler(rows, 'filtered')}
-							>.csv - Filtered rows</ToolbarMenuItem
-						>
-					</ToolbarMenu>
-				{/if}
-			</ToolbarContent>
-		</Toolbar>
-		<svelte:fragment slot="cell" let:row let:cell>
-			{#if headers && linkColumn > -1 && linkColumn <= headers.length && cell.key === headers[linkColumn - 1].key}
-				<Link href={link + row.id}>
+					{/if}
+					{#if deleteVisible === true}
+						<Button on:click={deleteHandler} icon={TrashCan16}>Delete</Button>
+					{/if}
+				</ToolbarBatchActions>
+				<ToolbarContent>
+					<div class="toolbar-item"><div>Rows: {rows.length}</div></div>
+					<ToolbarSearch value={searchValue} on:input={searchInput} on:clear={searchClear} />
+					{#if exportVisible === true}
+						<ToolbarMenu icon={Export16}>
+							<ToolbarMenuItem on:click={downloadHandler(initialRows, 'all')}
+								>.csv - All rows</ToolbarMenuItem
+							>
+							<ToolbarMenuItem on:click={downloadHandler(rows, 'filtered')}
+								>.csv - Filtered rows</ToolbarMenuItem
+							>
+						</ToolbarMenu>
+					{/if}
+					{#if addVisible === true}
+						<Button on:click={addHandler} icon={Add16}>Add</Button>
+					{/if}
+				</ToolbarContent>
+			</Toolbar>
+			<svelte:fragment slot="cell" let:row let:cell>
+				{#if headers && linkColumn > -1 && linkColumn <= headers.length && cell.key === headers[linkColumn - 1].key}
+					{#if link !== null}
+						<Link href={link + row.id}>
+							{cell.value}
+						</Link>
+					{:else}
+						<button class="bx--link link-button" on:click={linkClickHandler(row)}>
+							{cell.value}
+						</button>
+					{/if}
+				{:else if cell.key === 'session_start'}
+					{formatDateTime(new Date(cell.value))}
+				{:else}
 					{cell.value}
-				</Link>
-			{:else if cell.key === 'session_start'}
-				{formatDateTime(new Date(cell.value))}
-			{:else}
-				{cell.value}
-			{/if}
-		</svelte:fragment>
-	</DataTable>
+				{/if}
+			</svelte:fragment>
+		</DataTable>
+	</div>
 </div>
+
+<style>
+	.link-button {
+		align-items: center;
+		padding: 0;
+		border: 0;
+		appearance: none;
+		background: none;
+		cursor: pointer;
+		width: 100%;
+		height: 100%;
+	}
+
+	.bx--link:active,
+	.bx--link:active:visited,
+	.bx--link:active:visited:hover {
+		color: var(--cds-text-01, #161616);
+		text-decoration: none;
+	}
+
+	.bx--link:focus {
+		outline: none;
+	}
+
+</style>

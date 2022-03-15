@@ -1,13 +1,13 @@
-import { db, PQ } from '../../db';
+import { db, PQ } from '$src/db';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function post({ request }) {
     const data = await request.json();
     if (data.method === 'select') {
         return await select(data);
-    } else if (data.method === 'insert' && data.workshop.id === 0) {
+    } else if (data.method === 'insert') {
         return await insert(data);
-    } else if (data.method === 'insert' && data.workshop.id > 0) {
+    } else if (data.method === 'update') {
         return await update(data);
     }
 }
@@ -161,7 +161,7 @@ async function insert(data) {
             if (result.id > 0) {
                 let deleteSql = `delete from workshop_lecturer where workshop_id = ${data.workshop.id}; `;
                 if (data.workshop.lecturers.length > 0) {
-                    let insertSQL = 'insert into workshop_lecturer (workshop_id, user_id) values ';
+                    let insertSQL = 'insert into workshop_lecturer (workshop_id, lecturer_id) values returning id';
                     for (const lecturer of data.workshop.lecturers) {
                         insertSQL = insertSQL + `(${data.workshop.id}, ${lecturer.id}), `;
                     }
@@ -215,9 +215,7 @@ async function update(data) {
     try {
         if (data.user_id > 0) {
             let workshopSql = new PQ({
-                text: 'update workshop SET' +
-                    'title=$1, description=$2, content=$3, session_start=$4, session_end=$5, reg_start=$6, reg_end=$7, points=$8, sessiontype_id=$9, sessioncategory_id=$10, ' +
-                    'location_id=$11, sessionstatus_id=$12, updated_on=$13, updated_by=$14 WHERE id = $15 RETURNING id',
+                text: 'update workshop SET title=$1, description=$2, content=$3, session_start=$4, session_end=$5, reg_start=$6, reg_end=$7, points=$8, sessiontype_id=$9, sessioncategory_id=$10, location_id=$11, sessionstatus_id=$12, updated_on=$13, updated_by=$14 WHERE id = $15 RETURNING id',
                 values: [
                     data.workshop.title,
                     data.workshop.description,
@@ -244,11 +242,18 @@ async function update(data) {
 
             if (result.id > 0) {
                 let deleteSql = `delete from workshop_lecturer where workshop_id = ${data.workshop.id}; `;
+                let deleteLecturersResult = await db.query(deleteSql).catch((err) => {
+                    return {
+                        message: err.message
+                    };
+                });
                 if (data.workshop.lecturers.length > 0) {
-                    let insertSQL = 'insert into workshop_lecturer (workshop_id, user_id) values ';
+                    let insertSQL = 'insert into workshop_lecturer (workshop_id, lecturer_id) values';
                     for (const lecturer of data.workshop.lecturers) {
-                        insertSQL = insertSQL + `(${data.workshop.id}, ${lecturer.id}), `;
+                        insertSQL = insertSQL + ` (${data.workshop.id}, ${lecturer.id}), `;
                     }
+                    insertSQL = insertSQL + ' returning id';
+                    insertSQL = insertSQL.replace(',  returning id', ' returning id');
                     let insertLecturersResult = await db.query(insertSQL).catch((err) => {
                         return {
                             message: err.message

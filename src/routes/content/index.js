@@ -1,4 +1,4 @@
-import { db, PQ } from '../../db';
+import { db, PQ } from '$src/db';
 
 export async function post({ request }) {
     const data = await request.json();

@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
-import { db, PQ } from '../../../db';
-import { sendEmail } from '../../../mailer'
-import config from '../../../config.json';
+import { db, PQ } from '$src/db';
+import { sendEmail } from '$src/mailer'
+import config from '$src/config.json';
 
 export async function post({ request }) {
     const data = await request.json();

@@ -1,11 +1,11 @@
 <script>
 	const pageName = 'Content';
 	import { session, page } from '$app/stores';
-	import notifications, { loading } from '../../appStore.js';
-	import config from '../../config.json';
+	import notifications, { loading } from '$src/appStore.js';
+	import config from '$src/config.json';
 	import qrcode from 'qrcode';
 	import { v4 as uuidv4 } from 'uuid';
-	import { formatDateTime, formatDate, formatTime, toProperCase } from '../../global.js';
+	import { formatDateTime, formatDate, formatTime, toProperCase } from '$src/global.js';
 	import {
 		Tile,
 		Breadcrumb,
@@ -147,7 +147,7 @@
 				const response = await fetch('/content/[id]', {
 					method: 'POST',
 					body: JSON.stringify({
-						method: 'insert',
+						method: workshop.id > 0 ? 'update' : 'insert',
 						workshop,
 						user_id: $session.user.id
 					}),
@@ -170,36 +170,6 @@
 			notifications.showNotification(true, 'error', 'comp other err: ' + err.message);
 		}
 	}
-
-	// function usersToLecturers() {
-	// 	const selectedRows = getSelectedRows(users, selectedUserRowIds);
-	// 	users = users.filter(
-	// 		(u) =>
-	// 			!selectedRows
-	// 				.map(function (s) {
-	// 					return s.id;
-	// 				})
-	// 				.includes(u.id)
-	// 	);
-	// 	lecturers.push(...selectedRows);
-	// 	selectedUserRowIds = [];
-	// 	selectedLecturerRowIds = [];
-	// }
-
-	// function lecturersToUsers() {
-	// 	const selectedRows = getSelectedRows(lecturers, selectedLecturerRowIds);
-	// 	lecturers = lecturers.filter(
-	// 		(u) =>
-	// 			!selectedRows
-	// 				.map(function (s) {
-	// 					return s.id;
-	// 				})
-	// 				.includes(u.id)
-	// 	);
-	// 	users.push(...selectedRows);
-	// 	selectedUserRowIds = [];
-	// 	selectedLecturerRowIds = [];
-	// }
 
 	let registrationQrCode = 'empty';
 	function generateRegistrationQrCode() {
@@ -315,7 +285,7 @@
 			</div>
 
 			<div class="content-select py-3">
-				<Select id="select-type" labelText="Type" selected={workshop.sessiontype_id}>
+				<Select id="select-type" labelText="Type" bind:selected={workshop.sessiontype_id}>
 					<SelectItem disabled hidden value="-1" text="Choose an option" />
 					{#if sessiontype}
 						{#each sessiontype as item}
@@ -326,7 +296,7 @@
 			</div>
 
 			<div class="content-select py-3">
-				<Select id="select-category" labelText="Category" selected={workshop.sessioncategory_id}>
+				<Select id="select-category" labelText="Category" bind:selected={workshop.sessioncategory_id}>
 					<SelectItem disabled hidden value="-1" text="Choose an option" />
 					{#if sessioncategory}
 						{#each sessioncategory as item}
@@ -337,7 +307,7 @@
 			</div>
 
 			<div class="content-select py-3">
-				<Select id="select-location" labelText="Location" selected={workshop.location_id}>
+				<Select id="select-location" labelText="Location" bind:selected={workshop.location_id}>
 					<SelectItem disabled hidden value="-1" text="Choose an option" />
 					{#if locations}
 						{#each locations as item}
@@ -348,7 +318,7 @@
 			</div>
 
 			<div class="content-select py-3">
-				<Select id="select-status" labelText="Status" selected={workshop.sessionstatus_id}>
+				<Select id="select-status" labelText="Status" bind:selected={workshop.sessionstatus_id}>
 					<SelectItem disabled hidden value="-1" text="Choose an option" />
 					{#if sessionstatus}
 						{#each sessionstatus as item}

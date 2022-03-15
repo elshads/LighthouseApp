@@ -1,7 +1,7 @@
 <script>
-	import config from '../../config.json';
-	import { loading } from '../../appStore.js';
-	import { csvGenerator } from '../../csvGenerator';
+	import config from '$src/config.json';
+	import { loading } from '$src/appStore.js';
+	import { csvGenerator } from '$src/csvGenerator';
 	import {
 		DataTable,
 		Toolbar,

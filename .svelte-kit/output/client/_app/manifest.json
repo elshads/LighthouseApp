@@ -1,0 +1,331 @@
+{
+  ".svelte-kit/runtime/client/start.js": {
+    "file": "start-8a4f8e5c.js",
+    "src": ".svelte-kit/runtime/client/start.js",
+    "isEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_singletons-d1fb5791.js"
+    ],
+    "dynamicImports": [
+      "src/routes/__layout.svelte",
+      "src/routes/__error.svelte",
+      "src/routes/index.svelte",
+      "src/routes/sessioncategory/index.svelte",
+      "src/routes/path-notfound/__layout.reset.svelte",
+      "src/routes/path-notfound/index.svelte",
+      "src/routes/activities/index.svelte",
+      "src/routes/lecturers/index.svelte",
+      "src/routes/workshops/index.svelte",
+      "src/routes/content/index.svelte",
+      "src/routes/content/[id].svelte",
+      "src/routes/profile/index.svelte",
+      "src/routes/users/index.svelte",
+      "src/routes/users/[id].svelte",
+      "src/routes/auth/__layout.reset.svelte",
+      "src/routes/auth/restorepassword/index.svelte",
+      "src/routes/auth/confirmation/index.svelte",
+      "src/routes/auth/confirmation/[token].svelte",
+      "src/routes/auth/register/index.svelte",
+      "src/routes/auth/login/index.svelte"
+    ]
+  },
+  "src/routes/__layout.svelte": {
+    "file": "pages/__layout.svelte-df6804cb.js",
+    "src": "src/routes/__layout.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_stores-847348a8.js",
+      "_appStore-28a71663.js",
+      "_config-352e7003.js",
+      "_navigation-0e6511d1.js",
+      "_Notification-c75caa29.js",
+      "_singletons-d1fb5791.js",
+      "_global-a1cc3230.js"
+    ]
+  },
+  "src/routes/__error.svelte": {
+    "file": "pages/__error.svelte-e7099877.js",
+    "src": "src/routes/__error.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js"
+    ]
+  },
+  "src/routes/index.svelte": {
+    "file": "pages/index.svelte-4b0ae600.js",
+    "src": "src/routes/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_navigation-0e6511d1.js",
+      "_singletons-d1fb5791.js"
+    ]
+  },
+  "src/routes/sessioncategory/index.svelte": {
+    "file": "pages/sessioncategory/index.svelte-e931cbee.js",
+    "src": "src/routes/sessioncategory/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js"
+    ]
+  },
+  "src/routes/path-notfound/__layout.reset.svelte": {
+    "file": "pages/path-notfound/__layout.reset.svelte-69cc1e5d.js",
+    "src": "src/routes/path-notfound/__layout.reset.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js"
+    ]
+  },
+  "src/routes/path-notfound/index.svelte": {
+    "file": "pages/path-notfound/index.svelte-2211c479.js",
+    "src": "src/routes/path-notfound/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_appStore-28a71663.js"
+    ],
+    "css": [
+      "assets/pages/path-notfound/index.svelte-02f17153.css"
+    ]
+  },
+  "src/routes/activities/index.svelte": {
+    "file": "pages/activities/index.svelte-17401167.js",
+    "src": "src/routes/activities/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_appStore-28a71663.js"
+    ]
+  },
+  "src/routes/lecturers/index.svelte": {
+    "file": "pages/lecturers/index.svelte-dd3a9df1.js",
+    "src": "src/routes/lecturers/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_stores-847348a8.js",
+      "_appStore-28a71663.js",
+      "_DataGrid-4595a724.js",
+      "_csvGenerator-27de1fc1.js",
+      "_global-a1cc3230.js"
+    ],
+    "css": [
+      "assets/DataGrid.svelte_svelte_type_style_lang-3c79b294.css"
+    ]
+  },
+  "src/routes/workshops/index.svelte": {
+    "file": "pages/workshops/index.svelte-44f69540.js",
+    "src": "src/routes/workshops/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_appStore-28a71663.js",
+      "_global-a1cc3230.js"
+    ],
+    "css": [
+      "assets/pages/workshops/index.svelte-9b21009e.css"
+    ]
+  },
+  "src/routes/content/index.svelte": {
+    "file": "pages/content/index.svelte-228303cd.js",
+    "src": "src/routes/content/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_stores-847348a8.js",
+      "_appStore-28a71663.js",
+      "_DataGrid-4595a724.js",
+      "_csvGenerator-27de1fc1.js",
+      "_global-a1cc3230.js"
+    ],
+    "css": [
+      "assets/DataGrid.svelte_svelte_type_style_lang-3c79b294.css"
+    ]
+  },
+  "src/routes/content/[id].svelte": {
+    "file": "pages/content/_id_.svelte-78244168.js",
+    "src": "src/routes/content/[id].svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_stores-847348a8.js",
+      "_appStore-28a71663.js"
+    ],
+    "css": [
+      "assets/DataGrid.svelte_svelte_type_style_lang-3c79b294.css"
+    ]
+  },
+  "src/routes/profile/index.svelte": {
+    "file": "pages/profile/index.svelte-37965fef.js",
+    "src": "src/routes/profile/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js"
+    ]
+  },
+  "src/routes/users/index.svelte": {
+    "file": "pages/users/index.svelte-0aafbc75.js",
+    "src": "src/routes/users/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_appStore-28a71663.js",
+      "_csvGenerator-27de1fc1.js",
+      "_stores-847348a8.js"
+    ]
+  },
+  "src/routes/users/[id].svelte": {
+    "file": "pages/users/_id_.svelte-2a258e25.js",
+    "src": "src/routes/users/[id].svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js"
+    ]
+  },
+  "src/routes/auth/__layout.reset.svelte": {
+    "file": "pages/auth/__layout.reset.svelte-ed010072.js",
+    "src": "src/routes/auth/__layout.reset.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_appStore-28a71663.js",
+      "_Notification-c75caa29.js",
+      "_config-352e7003.js",
+      "_global-a1cc3230.js"
+    ]
+  },
+  "src/routes/auth/restorepassword/index.svelte": {
+    "file": "pages/auth/restorepassword/index.svelte-35788764.js",
+    "src": "src/routes/auth/restorepassword/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js"
+    ]
+  },
+  "src/routes/auth/confirmation/index.svelte": {
+    "file": "pages/auth/confirmation/index.svelte-ea135bb0.js",
+    "src": "src/routes/auth/confirmation/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_appStore-28a71663.js"
+    ],
+    "css": [
+      "assets/pages/auth/confirmation/index.svelte-98c7a813.css"
+    ]
+  },
+  "src/routes/auth/confirmation/[token].svelte": {
+    "file": "pages/auth/confirmation/_token_.svelte-31d930d1.js",
+    "src": "src/routes/auth/confirmation/[token].svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_stores-847348a8.js"
+    ],
+    "css": [
+      "assets/pages/auth/confirmation/_token_.svelte-e5a82cdf.css"
+    ]
+  },
+  "src/routes/auth/register/index.svelte": {
+    "file": "pages/auth/register/index.svelte-cc1a2198.js",
+    "src": "src/routes/auth/register/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_config-352e7003.js",
+      "_appStore-28a71663.js",
+      "_navigation-0e6511d1.js",
+      "_singletons-d1fb5791.js"
+    ]
+  },
+  "src/routes/auth/login/index.svelte": {
+    "file": "pages/auth/login/index.svelte-25442e86.js",
+    "src": "src/routes/auth/login/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_appStore-28a71663.js",
+      "_navigation-0e6511d1.js",
+      "_singletons-d1fb5791.js"
+    ]
+  },
+  "_vendor-cf8775f0.js": {
+    "file": "chunks/vendor-cf8775f0.js",
+    "css": [
+      "assets/vendor-5f558de4.css"
+    ]
+  },
+  "_singletons-d1fb5791.js": {
+    "file": "chunks/singletons-d1fb5791.js"
+  },
+  "_stores-847348a8.js": {
+    "file": "chunks/stores-847348a8.js",
+    "imports": [
+      "_vendor-cf8775f0.js"
+    ]
+  },
+  "_appStore-28a71663.js": {
+    "file": "chunks/appStore-28a71663.js",
+    "imports": [
+      "_vendor-cf8775f0.js"
+    ]
+  },
+  "_Notification-c75caa29.js": {
+    "file": "chunks/Notification-c75caa29.js",
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_appStore-28a71663.js",
+      "_global-a1cc3230.js"
+    ]
+  },
+  "_navigation-0e6511d1.js": {
+    "file": "chunks/navigation-0e6511d1.js",
+    "imports": [
+      "_singletons-d1fb5791.js"
+    ]
+  },
+  "_config-352e7003.js": {
+    "file": "chunks/config-352e7003.js"
+  },
+  "_global-a1cc3230.js": {
+    "file": "chunks/global-a1cc3230.js"
+  },
+  "_DataGrid-4595a724.js": {
+    "file": "chunks/DataGrid-4595a724.js",
+    "imports": [
+      "_vendor-cf8775f0.js",
+      "_csvGenerator-27de1fc1.js",
+      "_global-a1cc3230.js",
+      "_appStore-28a71663.js"
+    ],
+    "css": [
+      "assets/DataGrid.svelte_svelte_type_style_lang-3c79b294.css"
+    ]
+  },
+  "_csvGenerator-27de1fc1.js": {
+    "file": "chunks/csvGenerator-27de1fc1.js"
+  }
+}

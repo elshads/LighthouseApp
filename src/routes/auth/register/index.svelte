@@ -1,7 +1,7 @@
 <script>
 	const pageName = 'Register';
-	import config from '../../../config.json';
-	import notifications, { loading } from '../../../appStore.js';
+	import config from '$src/config.json';
+	import notifications, { loading } from '$src/appStore.js';
 	import { TextInput, Button, Link } from 'carbon-components-svelte';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';

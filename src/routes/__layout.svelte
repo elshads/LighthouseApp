@@ -16,7 +16,7 @@
 
 <script>
 	import { session } from '$app/stores';
-	import { loading, theme } from '../appStore.js';
+	import { loading, theme } from '$src/appStore.js';
 	import { Loading } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 

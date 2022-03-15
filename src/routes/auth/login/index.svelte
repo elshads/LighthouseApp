@@ -1,6 +1,6 @@
 <script>
 	const pageName = 'Login';
-	import notifications, { loading } from '../../../appStore.js';
+	import notifications, { loading } from '$src/appStore.js';
 	import { TextInput, Button, Link } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';

@@ -3,8 +3,8 @@
 	import { Link, Button, TextInput } from 'carbon-components-svelte';
 	import Badge from 'carbon-pictograms-svelte/lib/Badge.svelte';
 	import DoNot from 'carbon-pictograms-svelte/lib/DoNot.svelte';
-	import notifications from '../../../appStore.js';
-	import config from '../../../config.json';
+	import notifications from '$src/appStore.js';
+	import config from '$src/config.json';
 	import { onMount } from 'svelte';
 
 	let linkSent = false;

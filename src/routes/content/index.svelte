@@ -1,8 +1,8 @@
 <script>
 	const pageName = 'Content List';
 	import { session } from '$app/stores';
-	import notifications, { loading } from '../../appStore.js';
-	import { formatDateTime, formatDate, formatTime, toProperCase } from '../../global.js';
+	import notifications, { loading } from '$src/appStore.js';
+	import { formatDateTime, formatDate, formatTime, toProperCase } from '$src/global.js';
 	import { Tile, Breadcrumb, BreadcrumbItem, Button, Link } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import DataGrid from '$lib/DataGrid.svelte';
@@ -26,7 +26,7 @@
 		$loading = false;
 	});
 
-	let dataX;
+	
 	async function loadData() {
 		$loading = true;
 		try {
@@ -64,14 +64,12 @@
 	</Breadcrumb>
 </Tile>
 
-<div>{JSON.stringify(dataX)}</div>
 
 <DataGrid
 	bind:rows
 	bind:selectedRows
 	{headers}
 	searchKeys={['title', 'created_by_name', 'sessiontype_name']}
-	size="tall"
 	tableClass="contentlist-table"
 	linkColumn="2"
 	link="/content/"
