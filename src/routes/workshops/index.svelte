@@ -21,11 +21,44 @@
 	import Category16 from 'carbon-icons-svelte/lib/Category16';
 	import Location16 from 'carbon-icons-svelte/lib/Location16';
 
-	import { content } from './test';
+	import {onMount} from 'svelte';
 
 	const success = '#42be65';
 	const fail = '#da1e28';
 	const neutral = '';
+	let workshopList = [];
+
+	onMount(async () => {
+		$loading = true;
+		await loadData();
+		$loading = false;
+	});
+
+	
+	async function loadData() {
+		$loading = true;
+		try {
+			const response = await fetch('/workshops', {
+				method: 'POST',
+				body: JSON.stringify({
+					user_id: $session.user.id
+				}),
+				headers: {
+					'Content-Type': 'application/json',
+					accept: 'application/json'
+				}
+			});
+			const data = await response.json();
+			if (data.rows.length > 0) {
+				workshopList = data.rows;
+			} else {
+				notifications.showNotification(true, 'error', data.message);
+			}
+		} catch (err) {
+			notifications.showNotification(true, 'error', 'comp other err: ' + err.message);
+		}
+		$loading = false;
+	}
 
 	function register(id, status) {
 		let index = workshopList.findIndex((e) => e.id === id);
@@ -39,30 +72,7 @@
 		}
 	}
 
-	let workshopList = [
-		{
-			id: 1,
-			title: 'Workshop 1 Title',
-			sessionstatus_id: 1,
-			sessionstatus_name: 'Registered',
-			session_start: new Date('2022-02-23 15:00'),
-			session_end: new Date('2022-02-23 16:30'),
-			points: 90,
-			sessioncategory_name: 'Equality',
-			location_name: 'Online'
-		},
-		{
-			id: 2,
-			title: 'Workshop 2 Title',
-			sessionstatus_id: 0,
-			sessionstatus_name: 'Not Registered',
-			session_start: new Date('2022-02-24 12:00'),
-			session_end: new Date('2022-02-24 14:00'),
-			points: 120,
-			sessioncategory_name: 'Career',
-			location_name: 'Online'
-		}
-	];
+	
 </script>
 
 <svelte:head>
@@ -87,22 +97,21 @@
 						<h6 class="col-8">{item.title}</h6>
 						<div class="col-4">
 							<div class="row right">
-								<h6 class="ml-2 mr-4">{formatDateTime(item.session_start)}</h6>
-								<h6 class="mr-4">{item.sessionstatus_name}</h6>
-								<CircleFilled16 style="fill: {item.sessionstatus_id > 0 ? success : fail}" />
+								<h6 class="ml-2 mr-4">{formatDateTime(new Date(item.session_start))}</h6>
+								<h6 class="mr-4">UserRegStatus</h6>
+								<CircleFilled16 style="fill: {false ? success : fail}" />
 							</div>
 						</div>
 					</div>
 				</svelte:fragment>
 				<div class="row between top">
 					<div class="col-8">
-						<!-- <p class="multiline">{item.description}</p> -->
-						<Viewer {content} />
+						<Viewer content={item.content} />
 					</div>
 					<div class="col-4 col-width text-right">
 						<div class="d-flex right center-y">
 							<p class="ml-2 mr-4">
-								Duration: {formatTime(item.session_start)} - {formatTime(item.session_end)}
+								Duration: {formatTime(new Date(item.session_start))} - {formatTime(new Date(item.session_end))}
 							</p>
 							<Time16 />
 						</div>

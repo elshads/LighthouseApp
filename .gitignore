@@ -1,6 +1,7 @@
 .DS_Store
 /build
 /backup
+/src/config.json
 .env
 .env.*
 !.env.example
