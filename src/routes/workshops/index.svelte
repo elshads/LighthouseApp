@@ -98,7 +98,7 @@
 						<div class="col-4">
 							<div class="row right">
 								<h6 class="ml-2 mr-4">{formatDateTime(new Date(item.session_start))}</h6>
-								<h6 class="mr-4">UserRegStatus</h6>
+								<h6 class="mr-4">UserRegisStatus</h6>
 								<CircleFilled16 style="fill: {false ? success : fail}" />
 							</div>
 						</div>
