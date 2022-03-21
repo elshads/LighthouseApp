@@ -16,6 +16,8 @@
 	import { GaugeChart, DonutChart, RadarChart } from '@carbon/charts-svelte';
 	import CircleFilled16 from 'carbon-icons-svelte/lib/CircleFilled16';
 	import Time16 from 'carbon-icons-svelte/lib/Time16';
+	import Calendar16 from 'carbon-icons-svelte/lib/Calendar16';
+	import EventSchedule16 from 'carbon-icons-svelte/lib/EventSchedule16';
 	import Badge16 from 'carbon-icons-svelte/lib/Badge16';
 	import UserSpeaker16 from 'carbon-icons-svelte/lib/UserSpeaker16';
 	import Category16 from 'carbon-icons-svelte/lib/Category16';
@@ -111,25 +113,37 @@
 					<div class="col-4 col-width text-right">
 						<div class="d-flex right center-y">
 							<p class="ml-2 mr-4">
-								Duration: {formatTime(new Date(item.session_start))} - {formatTime(new Date(item.session_end))}
+								<span class="color-primary">Start date: </span>{formatDate(new Date(item.session_start))}
+							</p>
+							<Calendar16 />
+						</div>
+						<div class="d-flex right center-y mt-2">
+							<p class="ml-2 mr-4">
+								<span class="color-primary">Duration: </span>{formatTime(new Date(item.session_start))} - {formatTime(new Date(item.session_end))}
 							</p>
 							<Time16 />
 						</div>
 						<div class="d-flex right center-y mt-2">
-							<p class="ml-2 mr-4">Points: {item.points}</p>
+							<p class="ml-2 mr-4">
+								<span class="color-primary">Reg. end: </span>{formatDateTime(new Date(item.reg_end))}
+							</p>
+							<EventSchedule16 />
+						</div>
+						<div class="d-flex right center-y mt-2">
+							<p class="ml-2 mr-4"><span class="color-primary">Points: </span>{item.points}</p>
 							<Badge16 />
 						</div>
 						<div class="d-flex right center-y mt-2">
-							<p class="ml-2 mr-4">Category: {item.sessioncategory_name}</p>
+							<p class="ml-2 mr-4"><span class="color-primary">Category: </span>{item.sessioncategory_name}</p>
 							<Category16 />
 						</div>
 						<div class="d-flex right center-y mt-2">
-							<p class="ml-2 mr-4">Location: {item.location_name}</p>
+							<p class="ml-2 mr-4"><span class="color-primary">Location: </span>{item.location_name}</p>
 							<Location16 />
 						</div>
 						{#if item.lecturers}
 							<div class="d-flex right center-y mt-2">
-								<h6 class="ml-2 mr-4">Lecturer(s)</h6>
+								<h6 class="ml-2 mr-4"><span class="color-primary">Lecturer(s)</span></h6>
 								<UserSpeaker16 />
 							</div>
 							{#each item.lecturers as lecturer}
@@ -139,6 +153,7 @@
 						<div class="right center-y mt-4">
 							<Button
 								kind={item.sessionstatus_id > 0 ? 'danger' : 'primary'}
+								disabled={!(new Date(item.reg_start) <= new Date(Date.now()) && new Date(item.reg_end) >= new Date(Date.now())) }
 								on:click={() => register(item.id, item.sessionstatus_id)}
 								>{item.sessionstatus_id > 0 ? 'Deregister' : 'Register'}</Button
 							>

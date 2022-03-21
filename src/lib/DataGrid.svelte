@@ -12,7 +12,8 @@
 		ToolbarMenu,
 		ToolbarMenuItem,
 		ToolbarBatchActions,
-		Link
+		Link,
+		Modal
 	} from 'carbon-components-svelte';
 	import Export16 from 'carbon-icons-svelte/lib/Export16';
 	import TrashCan16 from 'carbon-icons-svelte/lib/TrashCan16';
@@ -27,7 +28,7 @@
 	export let tableClass = 'data-table';
 	export let linkColumn = -1;
 	export let link = null;
-	export let searchKeys = ['name'];
+	export let searchKeys = [];
 	export let exportVisible = true;
 	export let addVisible = false;
 	export let deleteVisible = false;
@@ -49,6 +50,7 @@
 	let initialRows = [];
 	let searchValue = '';
 	let filtering = false;
+	let deleteModalOpen = false;
 
 	function searchInput(event) {
 		filtering = true;
@@ -58,9 +60,10 @@
 			rows = initialRows;
 		} else {
 			rows = initialRows.filter(function (e) {
-				const count = searchKeys.length;
+				const keys = searchKeys.length > 0 ? searchKeys : headers.map(function (item) { return item.key; });
+				const count = keys.length;
 				for (let i = 0; i < count; i++) {
-					const result = e[searchKeys[i]]?.toLowerCase().includes(searchValue.toLowerCase());
+					const result = e[keys[i]]?.toString().toLowerCase().includes(searchValue.toLowerCase());
 					if (result) {
 						return result;
 					}
@@ -105,7 +108,7 @@
 						>
 					{/if}
 					{#if deleteVisible === true}
-						<Button on:click={deleteHandler} icon={TrashCan16}>Delete</Button>
+						<Button on:click={() => (deleteModalOpen = true)} icon={TrashCan16}>Delete</Button>
 					{/if}
 				</ToolbarBatchActions>
 				<ToolbarContent>
@@ -139,6 +142,8 @@
 					{/if}
 				{:else if cell.key === 'session_start'}
 					{formatDateTime(new Date(cell.value))}
+				{:else if cell.key === 'reg_start'}
+					{(new Date(row.reg_start) <= new Date(Date.now()) && new Date(row.reg_end) >= new Date(Date.now())) ? "Open" : "Closed"}
 				{:else}
 					{cell.value}
 				{/if}
@@ -146,6 +151,23 @@
 		</DataTable>
 	</div>
 </div>
+
+<Modal
+	danger
+	bind:open={deleteModalOpen}
+	modalHeading="Delete"
+	primaryButtonText="Delete"
+	secondaryButtonText="Cancel"
+	on:click:button--secondary={() => (deleteModalOpen = false)}
+	on:open
+	on:close
+	on:submit={() => {
+		deleteHandler();
+		deleteModalOpen = false;
+	}}
+>
+	<p>Are you sure you want to delete selected {selectedRowIds.length} item(s)</p>
+</Modal>
 
 <style>
 	.link-button {
@@ -169,5 +191,4 @@
 	.bx--link:focus {
 		outline: none;
 	}
-
 </style>

@@ -301,6 +301,11 @@ body {
     height: calc(100vh - 12.5rem);
 }
 
+.lecturers-table .bx--data-table--sticky-header {
+    max-height: calc(100vh - 12.5rem);
+    height: calc(100vh - 12.5rem);
+}
+
 .contentlist-table .bx--data-table--sticky-header {
     max-height: calc(100vh - 12.5rem);
     height: calc(100vh - 12.5rem);
@@ -328,6 +333,11 @@ body {
 
 .contentlist-table thead tr th:nth-child(7),
 .contentlist-table tbody tr td:nth-child(7) {
+    max-width: 9rem;
+}
+
+.contentlist-table thead tr th:nth-child(8),
+.contentlist-table tbody tr td:nth-child(8) {
     max-width: 10rem;
 }
 

@@ -18,7 +18,8 @@
 		FormGroup,
 		Select,
 		SelectItem,
-		Tag
+		Tag,
+		NumberInput
 	} from 'carbon-components-svelte';
 	import { DateInput } from 'date-picker-svelte';
 	import Editor from '$lib/Editor.svelte';
@@ -28,9 +29,10 @@
 	import Export16 from 'carbon-icons-svelte/lib/Export16';
 	import UserCertification20 from 'carbon-icons-svelte/lib/UserCertification20';
 	import QrCode20 from 'carbon-icons-svelte/lib/QrCode20';
+	import { goto } from '$app/navigation';
 
 	let workshop = {
-		id: null,
+		id: 0,
 		title: null,
 		description: null,
 		content: null,
@@ -38,15 +40,15 @@
 		session_end: new Date(Date.now() + 1000 * 60 * 60 * 25),
 		reg_start: new Date(Date.now()),
 		reg_end: new Date(Date.now() + 1000 * 60 * 60 * 24),
-		points: null,
-		sessiontype_id: null,
-		sessioncategory_id: null,
-		sessionstatus_id: null,
-		location_id: null,
-		created_on: null,
-		created_by: null,
-		updated_on: null,
-		updated_by: null,
+		points: 0,
+		sessiontype_id: 0,
+		sessioncategory_id: 0,
+		sessionstatus_id: 0,
+		location_id: 1,
+		created_on: new Date(Date.now()),
+		created_by: 0,
+		updated_on: new Date(Date.now()),
+		updated_by: 0,
 		registration_token: null,
 		attendance_token: null,
 		lecturers: []
@@ -93,24 +95,63 @@
 			const data = await response.json();
 			if (data.status === 200) {
 				lecturers = data.lecturers;
+				sessionstatus = data.sessionstatus;
+				sessiontype = data.sessiontype;
+				sessioncategory = data.sessioncategory;
+				locations = data.locations;
 				if (data.workshop) {
-					workshop.id = data.workshop.id;
+					workshop.id = data.workshop.id === undefined ? workshop.id : data.workshop.id;
 					workshop.title = data.workshop.title;
 					workshop.description = data.workshop.description;
 					workshop.content = data.workshop.content;
-					workshop.session_start = new Date(data.workshop.session_start);
-					workshop.session_end = new Date(data.workshop.session_end);
-					workshop.reg_start = new Date(data.workshop.reg_start);
-					workshop.reg_end = new Date(data.workshop.reg_end);
-					workshop.points = data.workshop.points;
-					workshop.sessiontype_id = data.workshop.sessiontype_id;
-					workshop.sessioncategory_id = data.workshop.sessioncategory_id;
-					workshop.sessionstatus_id = data.workshop.sessionstatus_id;
-					workshop.location_id = data.workshop.location_id;
+					workshop.session_start =
+						data.workshop.session_start === undefined
+							? workshop.session_start
+							: new Date(data.workshop.session_start);
+					workshop.session_end =
+						data.workshop.session_end === undefined
+							? workshop.session_end
+							: new Date(data.workshop.session_end);
+					workshop.reg_start =
+						data.workshop.reg_start === undefined
+							? workshop.reg_start
+							: new Date(data.workshop.reg_start);
+					workshop.reg_end =
+						data.workshop.reg_end === undefined
+							? workshop.reg_end
+							: new Date(data.workshop.reg_end);
+					workshop.points =
+						data.workshop.points === undefined ? workshop.points : data.workshop.points;
+					workshop.sessiontype_id =
+						data.workshop.sessiontype_id === undefined
+							? sessiontype !== undefined && sessiontype.length > 0
+								? sessiontype[0].id
+								: workshop.sessiontype_id
+							: data.workshop.sessiontype_id;
+					workshop.sessioncategory_id =
+						data.workshop.sessioncategory_id === undefined
+							? sessioncategory !== undefined && sessioncategory.length > 0
+								? sessioncategory[0].id
+								: workshop.sessioncategory_id
+							: data.workshop.sessioncategory_id;
+					workshop.sessionstatus_id =
+						data.workshop.sessionstatus_id === undefined
+							? sessionstatus !== undefined && sessionstatus.length > 0
+								? sessionstatus[0].id
+								: workshop.sessionstatus_id
+							: data.workshop.sessionstatus_id;
+					workshop.location_id =
+						data.workshop.location_id === undefined || data.workshop.location_id < 0
+							? location !== undefined && location.length > 0
+								? location[0].id
+								: workshop.location_id
+							: data.workshop.location_id;
 					workshop.created_on = new Date(data.workshop.created_on);
-					workshop.created_by = data.workshop.created_by;
+					workshop.created_by =
+						data.workshop.created_by === undefined ? $session.user.id : data.workshop.created_by;
 					workshop.updated_on = new Date(data.workshop.updated_on);
-					workshop.updated_by = data.workshop.updated_by;
+					workshop.updated_by =
+						data.workshop.updated_by === undefined ? $session.user.id : data.workshop.updated_by;
 					workshop.registration_token = data.workshop.registration_token;
 					workshop.attendance_token = data.attendance_token;
 
@@ -121,10 +162,6 @@
 						selectedLecturerIds.includes(lecturer.id)
 					);
 				}
-				sessionstatus = data.sessionstatus;
-				sessiontype = data.sessiontype;
-				sessioncategory = data.sessioncategory;
-				locations = data.locations;
 			} else {
 				notifications.showNotification(true, 'error', data.message);
 			}
@@ -142,7 +179,7 @@
 
 	async function Save() {
 		try {
-			if (true) {
+			if (valid_session_start && valid_session_end && valid_reg_start && valid_reg_end) {
 				// check form validation
 				const response = await fetch('/content/[id]', {
 					method: 'POST',
@@ -158,8 +195,12 @@
 				});
 				const data = await response.json();
 				if (data.status === 200) {
-					notifications.showNotification(true, 'warning', data.message);
-					await loadData();
+					if (workshop.id < 1) {
+						goto(`/content/${data.result.id}`);
+					}
+					else{
+						await loadData(`/content/${data.result.id}`);
+					}
 				} else {
 					notifications.showNotification(true, 'error', data.message);
 				}
@@ -285,6 +326,10 @@
 			</div>
 
 			<div class="content-select py-3">
+				<NumberInput label="Points" bind:value={workshop.points} />
+			</div>
+
+			<div class="content-select py-3">
 				<Select id="select-type" labelText="Type" bind:selected={workshop.sessiontype_id}>
 					<SelectItem disabled hidden value="-1" text="Choose an option" />
 					{#if sessiontype}
@@ -296,7 +341,11 @@
 			</div>
 
 			<div class="content-select py-3">
-				<Select id="select-category" labelText="Category" bind:selected={workshop.sessioncategory_id}>
+				<Select
+					id="select-category"
+					labelText="Category"
+					bind:selected={workshop.sessioncategory_id}
+				>
 					<SelectItem disabled hidden value="-1" text="Choose an option" />
 					{#if sessioncategory}
 						{#each sessioncategory as item}

@@ -8,6 +8,4 @@
 
 
 
-<a href='content'>Content link</a>
-
-<button on:click={() => goto('content')}>Content button</button>
+<h3>Homepage content</h3>

@@ -7,9 +7,11 @@
 	import { onMount } from 'svelte';
 	import DataGrid from '$lib/DataGrid.svelte';
 	import Export16 from 'carbon-icons-svelte/lib/Export16';
+	import { goto } from '$app/navigation';
 
 	let selectedRows;
 	let rows;
+	let deletedIds = [];
 
 	const headers = [
 		{ key: 'id', value: 'Id' },
@@ -17,7 +19,8 @@
 		{ key: 'created_by_name', value: 'Creator' },
 		{ key: 'sessiontype_name', value: 'Type' },
 		{ key: 'sessionstatus_name', value: 'Status' },
-		{ key: 'session_start', value: 'Start Date' }
+		{ key: 'reg_start', value: 'Registration' },
+		{ key: 'session_start', value: 'Start Date' },
 	];
 
 	onMount(async () => {
@@ -26,7 +29,6 @@
 		$loading = false;
 	});
 
-	
 	async function loadData() {
 		$loading = true;
 		try {
@@ -51,6 +53,29 @@
 		}
 		$loading = false;
 	}
+
+	async function deleteRows() {
+		deletedIds = selectedRows.map(function (item) {
+			return item.id;
+		});
+		const response = await fetch('/content', {
+					method: 'DELETE',
+					body: JSON.stringify({
+						deleted_ids: deletedIds,
+						user_id: $session.user.id
+					}),
+					headers: {
+						'Content-Type': 'application/json',
+						accept: 'application/json'
+					}
+				});
+				const data = await response.json();
+				if (data.message === undefined) {
+					await loadData();
+				} else {
+					notifications.showNotification(true, 'error', data.message);
+				}
+	}
 </script>
 
 <svelte:head>
@@ -64,13 +89,15 @@
 	</Breadcrumb>
 </Tile>
 
-
 <DataGrid
 	bind:rows
 	bind:selectedRows
 	{headers}
-	searchKeys={['title', 'created_by_name', 'sessiontype_name']}
 	tableClass="contentlist-table"
 	linkColumn="2"
 	link="/content/"
+	addVisible
+	deleteVisible
+	on:addClick={() => goto('content/0')}
+	on:deleteClick={() => deleteRows()}
 />

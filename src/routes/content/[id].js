@@ -26,7 +26,7 @@ async function select(data) {
             });
 
             let sessionstatusSql = new PQ({
-                text: 'select * from sessionstatus;'
+                text: 'select * from sessionstatus order by id;'
             });
             let sessionstatus = await db.query(sessionstatusSql).catch((err) => {
                 return {
@@ -72,7 +72,7 @@ async function select(data) {
             });
 
             let lecturersSql = new PQ({
-                text: 'select * from lecturer;'
+                text: 'select * from lecturer order by name;'
             });
             let lecturers = await db.query(lecturersSql).catch((err) => {
                 return {
@@ -157,7 +157,6 @@ async function insert(data) {
                     message: err.message
                 };
             });
-
             if (result.id > 0) {
                 let deleteSql = `delete from workshop_lecturer where workshop_id = ${data.workshop.id}; `;
                 if (data.workshop.lecturers.length > 0) {
@@ -174,6 +173,7 @@ async function insert(data) {
             }
 
             console.log(JSON.stringify(data.workshop));
+            console.log(result.message);
             return {
                 status: 200,
                 body: {

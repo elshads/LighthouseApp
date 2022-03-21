@@ -1,11 +1,11 @@
-import { db, PQ } from '$src/services/dbrvices/db';
+import { db, PQ } from '$src/db';
 
 export async function post({ request }) {
     const data = await request.json();
     try {
         if (data.user_id > 0) {
             let sql = new PQ({
-                text: 'select l.*, s.name status_name from lecturer l LEFT JOIN status s ON l.status_id = s.id;'
+                text: 'select l.*, s.name status_name from lecturer l LEFT JOIN status s ON l.status_id = s.id order by l.name;'
             });
             let rows = await db.query(sql).catch((err) => {
                 return {
