@@ -15,7 +15,7 @@
 	let element;
 	let editor;
 	let fileinput;
-	
+
 	onMount(() => {
 		editor = new Editor({
 			element: element,
@@ -65,7 +65,6 @@
 		});
 	});
 
-	$: if (editor && content) {editor.commands.setContent(content)};
 
 	function onFileSelected(event) {
 		let imageFile = event.target.files[0];
@@ -79,12 +78,25 @@
 		};
 	}
 
+	let rendered = false;
+	$: if (editor && content && !rendered) { rendered = true; editor.commands.setContent(content); }
+
+	
+	function setContent() {
+		if (editor && !rendered && content !== undefined) {
+			rendered = true;
+			editor.commands.setContent(content);
+		}
+	}
+
+
 	onDestroy(() => {
 		if (editor) {
 			editor.destroy();
 		}
 	});
 </script>
+
 
 <div class="tt-container">
 	{#if editor}
@@ -319,3 +331,4 @@
 		bind:this={fileinput}
 	/>
 </div>
+

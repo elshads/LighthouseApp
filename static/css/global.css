@@ -370,6 +370,12 @@ body {
     margin: -1rem -1rem 1rem -1rem;
 }
 
+.tile-button .bx--btn {
+    min-height: 2rem;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
 .content {
     margin-top: 3rem;
     margin-left: 3rem;
@@ -378,7 +384,7 @@ body {
 
 .bx--tile {
     min-height: 3rem;
-    padding: 1rem;
+    padding: 0.875rem;
 }
 
 .bx--side-nav {
@@ -501,7 +507,7 @@ a.bx--side-nav__link,
 }
 
 .autocomplete-list-item.confirmed {
-    background-color: #287DFF !important;
+    background-color: #287dff !important;
     color: #f4f4f4 !important;
 }
 
@@ -595,7 +601,7 @@ a.bx--side-nav__link,
 .tag:not(body).is-delete::before,
 .tag:not(body).is-delete::after {
     background-color: currentColor;
-    content: "";
+    content: '';
     display: block;
     left: 50%;
     position: absolute;

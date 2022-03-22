@@ -19,7 +19,10 @@
 		Select,
 		SelectItem,
 		Tag,
-		NumberInput
+		NumberInput,
+		Modal,
+		DataTable,
+		ImageLoader
 	} from 'carbon-components-svelte';
 	import { DateInput } from 'date-picker-svelte';
 	import Editor from '$lib/Editor.svelte';
@@ -29,6 +32,11 @@
 	import Export16 from 'carbon-icons-svelte/lib/Export16';
 	import UserCertification20 from 'carbon-icons-svelte/lib/UserCertification20';
 	import QrCode20 from 'carbon-icons-svelte/lib/QrCode20';
+	import Save16 from 'carbon-icons-svelte/lib/Save16';
+	import TrashCan16 from 'carbon-icons-svelte/lib/TrashCan16';
+	import UserMultiple16 from 'carbon-icons-svelte/lib/UserMultiple16';
+	import QrCode16 from 'carbon-icons-svelte/lib/QrCode16';
+	import Email16 from 'carbon-icons-svelte/lib/Email16';
 	import { goto } from '$app/navigation';
 
 	let workshop = {
@@ -59,6 +67,17 @@
 	let sessioncategory;
 	let locations;
 	let lecturers;
+
+	let deleteModalOpen = false;
+	let regUsersModalOpen = false;
+	let registrationQrModalOpen = false;
+	let attendanceQrModalOpen = false;
+
+	let regUsersHeaders = [
+		{ key: 'fullname', value: 'Name' },
+		{ key: 'username', value: 'Username' }
+	];
+	let registered_users = [];
 
 	let valid_session_start;
 	let valid_session_end;
@@ -99,6 +118,7 @@
 				sessiontype = data.sessiontype;
 				sessioncategory = data.sessioncategory;
 				locations = data.locations;
+				registered_users = data.registered_users;
 				if (data.workshop) {
 					workshop.id = data.workshop.id === undefined ? workshop.id : data.workshop.id;
 					workshop.title = data.workshop.title;
@@ -153,7 +173,10 @@
 					workshop.updated_by =
 						data.workshop.updated_by === undefined ? $session.user.id : data.workshop.updated_by;
 					workshop.registration_token = data.workshop.registration_token;
-					workshop.attendance_token = data.attendance_token;
+					workshop.attendance_token = data.workshop.attendance_token;
+
+					getRegistrationQrCodeUrl();
+					getAttendanceQrCodeUrl();
 
 					let selectedLecturerIds = data.workshop.lecturers.map(function (lecturer) {
 						return lecturer.id;
@@ -197,8 +220,7 @@
 				if (data.status === 200) {
 					if (workshop.id < 1) {
 						goto(`/content/${data.result.id}`);
-					}
-					else{
+					} else {
 						await loadData(`/content/${data.result.id}`);
 					}
 				} else {
@@ -212,17 +234,52 @@
 		}
 	}
 
-	let registrationQrCode = 'empty';
-	function generateRegistrationQrCode() {
+	let registrationQrCodeUrl;
+	let attendanceQrCodeUrl;
+	function getRegistrationQrCodeUrl() {
 		qrcode.toString(
-			config.appurl + '/workshops/' + uuidv4(),
+			config.appurl + '/workshops/registration/' + workshop.registration_token,
 			{ type: 'svg' },
 			function (err, svgurl) {
 				let blob = new Blob([svgurl], { type: 'image/svg+xml' });
 				let url = URL.createObjectURL(blob);
-				registrationQrCode = url;
+				registrationQrCodeUrl = url;
 			}
 		);
+	}
+
+	function getAttendanceQrCodeUrl() {
+		qrcode.toString(
+			config.appurl + '/workshops/attendance/' + workshop.attendance_token,
+			{ type: 'svg' },
+			function (err, svgurl) {
+				let blob = new Blob([svgurl], { type: 'image/svg+xml' });
+				let url = URL.createObjectURL(blob);
+				attendanceQrCodeUrl = url;
+			}
+		);
+	}
+
+	async function deleteHandler() {
+		if (workshop.id > 0) {
+			const response = await fetch('/content/[id]', {
+				method: 'DELETE',
+				body: JSON.stringify({
+					deleted_id: deletedId,
+					user_id: $session.user.id
+				}),
+				headers: {
+					'Content-Type': 'application/json',
+					accept: 'application/json'
+				}
+			});
+			const data = await response.json();
+			if (data.message === undefined) {
+				await loadData();
+			} else {
+				notifications.showNotification(true, 'error', data.message);
+			}
+		}
 	}
 </script>
 
@@ -231,11 +288,33 @@
 </svelte:head>
 
 <Tile class="tile">
-	<Breadcrumb noTrailingSlash>
-		<BreadcrumbItem href="/">Home</BreadcrumbItem>
-		<BreadcrumbItem href="/content">Content List</BreadcrumbItem>
-		<BreadcrumbItem href={$page.url.pathname} isCurrentPage>{pageName}</BreadcrumbItem>
-	</Breadcrumb>
+	<div class="center-y">
+		<div class="mr-8">
+			<Breadcrumb noTrailingSlash>
+				<BreadcrumbItem href="/">Home</BreadcrumbItem>
+				<BreadcrumbItem href="/content">Content List</BreadcrumbItem>
+				<BreadcrumbItem href={$page.url.pathname} isCurrentPage>{pageName}</BreadcrumbItem>
+			</Breadcrumb>
+		</div>
+		<div class="tile-button">
+			<Button class="mx-2" icon={Save16} on:click={Save}>Save</Button>
+			<Button
+				class="mx-2"
+				kind="danger"
+				disabled={workshop.id === undefined || workshop.id < 1}
+				icon={TrashCan16}
+				on:click={() => (deleteModalOpen = true)}>Delete</Button
+			>
+			<Button
+				class="mx-2"
+				kind="tertiary"
+				icon={UserMultiple16}
+				on:click={() => (regUsersModalOpen = true)}>Registered Users</Button
+			>
+			<Button class="mx-2" kind="tertiary" icon={QrCode16} on:click={() => (registrationQrModalOpen = true)}>Registration QR</Button>
+			<Button class="mx-2" kind="tertiary" icon={QrCode16} on:click={() => (attendanceQrModalOpen = true)}>Attendance QR</Button>
+		</div>
+	</div>
 </Tile>
 
 <div class="d-flex right">
@@ -392,9 +471,39 @@
 			/>
 		</div>
 	</div>
-	<div class="py-4">
-		<Button on:click={Save}>Save</Button>
-		<span class="px-3" />
-		<Button kind="danger">Delete</Button>
-	</div>
 </div>
+
+<Modal
+	danger
+	bind:open={deleteModalOpen}
+	modalHeading="Delete"
+	primaryButtonText="Delete"
+	secondaryButtonText="Cancel"
+	on:click:button--secondary={() => (deleteModalOpen = false)}
+	on:open
+	on:close
+	on:submit={() => {
+		deleteHandler();
+		deleteModalOpen = false;
+	}}
+>
+	<p>Are you sure you want to delete current item?</p>
+</Modal>
+
+<Modal passiveModal bind:open={regUsersModalOpen} modalHeading="Registered Users" on:open on:close>
+	<p>Rows: {registered_users.length}</p>
+	<DataTable headers={regUsersHeaders} rows={registered_users} />
+</Modal>
+
+<Modal passiveModal bind:open={registrationQrModalOpen} modalHeading="Registration QR" on:open on:close>
+	<ImageLoader src={registrationQrCodeUrl} alt="" height="300"/>
+	<p>URL: {config.appurl + '/workshops/registration/' + workshop.registration_token}</p>
+</Modal>
+
+<Modal passiveModal bind:open={attendanceQrModalOpen} modalHeading="Attendance QR" on:open on:close>
+	<ImageLoader src={attendanceQrCodeUrl} alt="" height="300"/>
+	<p>URL: {config.appurl + '/workshops/attendance/' + workshop.attendance_token}</p>
+	<div class="d-flex w-100 right">
+		<Button class="my-4" kind="tertiary" icon={Email16} on:click={() => notifications.showNotification(true, 'success', 'placeholder function for sending email')}>Send to the lecturer(s)</Button>
+	</div>
+</Modal>

@@ -80,6 +80,16 @@ async function select(data) {
                 };
             });
 
+            let registeredUsersSql = new PQ({
+                text: 'SELECT u.fullname, u.username FROM workshop_appuser wu inner join appuser u on wu.appuser_id = u.id where workshop_id = $1;',
+                values: [data.id]
+            });
+            let registered_users = await db.query(registeredUsersSql).catch((err) => {
+                return {
+                    message: err.message
+                };
+            });
+
             workshop.lecturers = workshop_lecturers;
 
             return {
@@ -91,7 +101,8 @@ async function select(data) {
                     sessionstatus,
                     sessiontype,
                     sessioncategory,
-                    locations
+                    locations,
+                    registered_users
                 },
                 headers: {
                     'Content-Type': 'application/json'

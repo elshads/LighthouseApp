@@ -82,7 +82,7 @@
 	function downloadHandler(data, type) {
 		if (data.length > 0) {
 			let tableKeys = Object.keys(initialRows[0]);
-			csvGenerator(data, tableKeys, tableKeys, `${pageName}_${type}.csv`);
+			csvGenerator(data, tableKeys, tableKeys, `export_${type}.csv`);
 		}
 	}
 
@@ -166,7 +166,7 @@
 		deleteModalOpen = false;
 	}}
 >
-	<p>Are you sure you want to delete selected {selectedRowIds.length} item(s)</p>
+	<p>Are you sure you want to delete selected {selectedRowIds.length} item(s)?</p>
 </Modal>
 
 <style>

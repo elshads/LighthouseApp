@@ -100,8 +100,8 @@
 						<div class="col-4">
 							<div class="row right">
 								<h6 class="ml-2 mr-4">{formatDateTime(new Date(item.session_start))}</h6>
-								<h6 class="mr-4">UserRegisStatus</h6>
-								<CircleFilled16 style="fill: {false ? success : fail}" />
+								<h6 class="mr-4">{item.registered > 0 ? 'Registered' : 'Not regist.'}</h6>
+								<CircleFilled16 style="fill: {item.registered > 0 ? success : fail}" />
 							</div>
 						</div>
 					</div>
@@ -152,10 +152,10 @@
 						{/if}
 						<div class="right center-y mt-4">
 							<Button
-								kind={item.sessionstatus_id > 0 ? 'danger' : 'primary'}
+								kind={item.registered > 0 ? 'danger' : 'primary'}
 								disabled={!(new Date(item.reg_start) <= new Date(Date.now()) && new Date(item.reg_end) >= new Date(Date.now())) }
-								on:click={() => register(item.id, item.sessionstatus_id)}
-								>{item.sessionstatus_id > 0 ? 'Deregister' : 'Register'}</Button
+								on:click={() => register(item.id)}
+								>{item.registered > 0 ? 'Deregister' : 'Register'}</Button
 							>
 						</div>
 					</div>
