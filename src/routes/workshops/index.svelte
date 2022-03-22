@@ -11,7 +11,8 @@
 		FormItem,
 		Tile,
 		Breadcrumb,
-		BreadcrumbItem
+		BreadcrumbItem,
+		Modal
 	} from 'carbon-components-svelte';
 	import { GaugeChart, DonutChart, RadarChart } from '@carbon/charts-svelte';
 	import CircleFilled16 from 'carbon-icons-svelte/lib/CircleFilled16';
@@ -29,6 +30,10 @@
 	const fail = '#da1e28';
 	const neutral = '';
 	let workshopList = [];
+
+	let registerModalOpen = false;
+	let selectedItemId = 0;
+	let selectedItemRegistered = 0;
 
 	onMount(async () => {
 		$loading = true;
@@ -62,15 +67,29 @@
 		$loading = false;
 	}
 
-	function register(id, status) {
-		let index = workshopList.findIndex((e) => e.id === id);
-		if (status === 1) {
-			workshopList[index].sessionstatus_id = 0;
-			workshopList[index].sessionstatus_name = 'Not Registered';
-		}
-		else if (status === 0){
-		workshopList[index].sessionstatus_id = 1;
-		workshopList[index].sessionstatus_name = 'Registered';
+	async function register(workshop_id, registered) {
+		try {
+			const response = await fetch('/workshops', {
+				method: 'PUT',
+				body: JSON.stringify({
+					user_id: $session.user.id,
+					workshop_id,
+					registered,
+				}),
+				headers: {
+					'Content-Type': 'application/json',
+					accept: 'application/json'
+				}
+			});
+			const data = await response.json();
+			if (data.result) {
+				await loadData();
+				notifications.showNotification(true, 'success', 'Successfully updated');
+			} else {
+				notifications.showNotification(true, 'error', data.message);
+			}
+		} catch (err) {
+			notifications.showNotification(true, 'error', 'comp other err: ' + err.message);
 		}
 	}
 
@@ -154,7 +173,7 @@
 							<Button
 								kind={item.registered > 0 ? 'danger' : 'primary'}
 								disabled={!(new Date(item.reg_start) <= new Date(Date.now()) && new Date(item.reg_end) >= new Date(Date.now())) }
-								on:click={() => register(item.id)}
+								on:click={() => {selectedItemId = item.id; selectedItemRegistered = item.registered; registerModalOpen = true;}}
 								>{item.registered > 0 ? 'Deregister' : 'Register'}</Button
 							>
 						</div>
@@ -164,6 +183,23 @@
 		{/each}
 	</Accordion>
 {/if}
+
+<Modal
+	danger={selectedItemRegistered > 0 ? true : false}
+	bind:open={registerModalOpen}
+	modalHeading="Workshop Registration"
+	primaryButtonText={selectedItemRegistered > 0 ? 'Deregister' : 'Register'}
+	secondaryButtonText="Cancel"
+	on:click:button--secondary={() => (registerModalOpen = false)}
+	on:open
+	on:close
+	on:submit={() => {
+		register(selectedItemId, selectedItemRegistered);
+		registerModalOpen = false;
+	}}
+>
+	<p>Are you sure you want to {selectedItemRegistered > 0 ? 'Deregister' : 'Register'}?</p>
+</Modal>
 
 <style>
 	.col-width {
